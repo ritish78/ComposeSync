@@ -1,5 +1,4 @@
 const express = require('express');
-const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
@@ -73,7 +72,7 @@ router.post('/', [
                 if (error) throw error;
                 //Sending JWT to end user
                 res.json({ 
-                        'id': user.id,
+                        // 'id': user.id,
                         token        
                     });
             }
@@ -84,3 +83,5 @@ router.post('/', [
     }
 })
 
+
+module.exports = router;

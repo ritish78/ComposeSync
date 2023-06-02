@@ -18,4 +18,8 @@ app.get('/', (req, res) => {
 })
 
 
+//Defining routes
+app.use('/api/auth', require('./routes/api/auth'));
+app.use('/api/users', require('./routes/api/users'));
+
 app.listen(EXPRESS_SERVER_PORT, () => console.log('Server listening on port', EXPRESS_SERVER_PORT));
