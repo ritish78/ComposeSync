@@ -39,6 +39,11 @@ router.post('/', auth, async (req, res) => {
      
         console.log('Profile of current user', { profile });
 
+        profile = new Profile({
+            user: req.user.id,
+            name: req.body.name
+        })
+
         await profile.save();
 
         res.status(201).json(profile);

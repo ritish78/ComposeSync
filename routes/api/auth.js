@@ -71,10 +71,10 @@ router.post('/', [
             (error, token) => {
                 if (error) throw error;
                 //Sending JWT to end user
-                res.json({ 
-                        // 'id': user.id,
-                        token        
-                    });
+                console.log('JWT for logged in user:', { token })
+                res.json({
+                    token
+                });
             }
         )
     } catch (error) {
