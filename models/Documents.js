@@ -11,14 +11,26 @@ const DocumentSchema = mongoose.Schema({
     data: {
         type: Object
     },
-    edited: {
-        type: Array,
-        default: []
-    },
-    sharedWith: {
-        type: Array,
-        default: []
-    },
+    edited: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'user'
+            },
+            date: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ],
+    sharedWith: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'user'
+            }
+        }
+    ],
     date: {
         type: Date,
         default: Date.now

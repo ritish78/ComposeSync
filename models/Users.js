@@ -17,10 +17,14 @@ const UserSchema = new mongoose.Schema({
     avatar: {
         type: String
     },
-    documents: {
-        type: Array,
-        default: [],
-    },
+    documents: [
+        {
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'user'
+            }
+        }
+    ],
     date: {
         type: Date,
         default: Date.now
