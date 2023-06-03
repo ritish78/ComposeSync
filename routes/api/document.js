@@ -82,13 +82,15 @@ router.get('/:documentId', auth, async (req, res) => {
         //Now checking if the document belongs to the current user
         if (req.user.id == document.user) {
             return res.json(document);
+        } else {
+            return res.status(401).json({ message: 'The user is not authorized to view this document!' });
         }
 
         /**
         TODO:
             Currently we are only checking the 'user' field in document which
-            corresponds to the creator of the document. If the current user is
-            also the creator of the document, then we are allowing them to view
+            corresponds to the author of the document. If the current user is
+            also the author of the document, then we are allowing them to view
             the document. However, we will need to implement another method which
             will check if the 'sharedWith' array also contains the user id of the
             current user. If so, we will allow them to view the document.
@@ -100,6 +102,38 @@ router.get('/:documentId', auth, async (req, res) => {
             return res.status(404).json({ message: 'Document does not exists!' })
         }
         res.status(500).send({ message: 'Could not retrieve document by the provided id' })
+    }
+})
+
+
+// @route       DELETE api/documents/:documentId
+// @desc        Delete a document by its id
+// @access      Private
+router.delete('/:documentId', auth, async (req, res) => {
+    try {
+        const document = await Document.findById(req.params.documentId);
+
+        if (!document) {
+            return res.status(404).json({ message: 'Document does not exists!' })
+        }
+
+        //Now we check if the current user is the the author of the document
+        //If so, then only we will allow for deleting the document.
+        if (req.user.id !== document.user.toString()) {
+            return res.status(401).json({ message: 'User is not authorized to delete this document!' })
+        }
+
+        //Finally, after checking if the document exists and then checking if the
+        //current user is the author of the document, we can delete the document
+        await Document.findByIdAndDelete(req.params.documentId);
+
+        res.json({ message: 'Document deleted!' });
+    } catch (error) {
+        console.error(error.message);
+        if (error.kind === 'ObjectId') {
+            return res.status(404).json({ message: 'Error while trying to delete document by its id!' })
+        }
+        res.status(500).send({ message: 'Server error while trying to delete document by its id!' })
     }
 })
 
