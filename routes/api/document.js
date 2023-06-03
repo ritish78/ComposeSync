@@ -137,4 +137,44 @@ router.delete('/:documentId', auth, async (req, res) => {
     }
 })
 
+
+// @route       POST api/documents/:documentId
+// @desc        Update post
+// @access      Private
+router.post('/:documentId', auth, async (req, res) => {
+    try {
+
+        const document = await Document.findById(req.params.documentId);
+        if (!document) {
+            return res.status(404).json({ message: 'Document does not exists!' })
+        }
+      
+
+        //Now we check if the current user is the the author of the document
+        //If so, then only we will allow for updating the document.
+        if (req.user.id !== document.user.toString()) {
+            return res.status(401).json({ message: 'User is not authorized to update this document!' })
+        }
+
+        //Getting the values from request body
+        const { name, data, edited, sharedWith } = req.body;
+
+        document.name = name;
+        document.data = data;
+        document.edited = edited;
+        document.sharedWith = sharedWith;
+    
+        await document.save();
+
+        return res.status(200).json(document);
+
+    } catch (error) {
+        console.error(error.message);
+        if (error.kind === 'ObjectId') {
+            return res.status(404).json({ message: 'Could not find the document to update' })
+        }
+        return res.status(500).send({ message: 'Server Error while trying to update document!' })
+    }
+})
+
 module.exports = router;
