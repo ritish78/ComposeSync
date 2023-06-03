@@ -68,4 +68,39 @@ router.get('/mine', auth, async (req, res) => {
 })
 
 
+// @route       GET api/documents/:documentId
+// @desc        Get document by its id
+// @access      Private
+router.get('/:documentId', auth, async (req, res) => {
+    try {
+        const document = await Document.findById(req.params.documentId);
+
+        if (!document) {
+            return res.status(404).json({ message: 'Document does not exists!' })
+        }
+
+        //Now checking if the document belongs to the current user
+        if (req.user.id == document.user) {
+            return res.json(document);
+        }
+
+        /**
+        TODO:
+            Currently we are only checking the 'user' field in document which
+            corresponds to the creator of the document. If the current user is
+            also the creator of the document, then we are allowing them to view
+            the document. However, we will need to implement another method which
+            will check if the 'sharedWith' array also contains the user id of the
+            current user. If so, we will allow them to view the document.
+         */
+
+    } catch (error) {
+        console.error(error.message);
+        if (error.kind === 'ObjectId') {
+            return res.status(404).json({ message: 'Document does not exists!' })
+        }
+        res.status(500).send({ message: 'Could not retrieve document by the provided id' })
+    }
+})
+
 module.exports = router;

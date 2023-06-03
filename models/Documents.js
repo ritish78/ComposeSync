@@ -15,6 +15,10 @@ const DocumentSchema = mongoose.Schema({
         type: Array,
         default: []
     },
+    sharedWith: {
+        type: Array,
+        default: []
+    },
     date: {
         type: Date,
         default: Date.now
