@@ -84,6 +84,9 @@ router.post('/', [
             { expiresIn: 86400000 },
             (error, token) => {
                 if (error) throw err;
+                
+                console.log('Token from api/users:', { token });
+
                 res.json({ 
                     token 
                 });

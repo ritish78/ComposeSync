@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const DocumentSchema = mongoose.Schema({
-    userid: {
+    user: {
         type: mongoose.Schema.Types.ObjectID,
-        ref: 'users'
+        ref: 'user'
     },
     name: {
         type: String

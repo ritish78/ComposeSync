@@ -21,5 +21,7 @@ app.get('/', (req, res) => {
 //Defining routes
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/documents', require('./routes/api/document'));
+app.use('/api/profile', require('./routes/api/profile'));
 
 app.listen(EXPRESS_SERVER_PORT, () => console.log('Server listening on port', EXPRESS_SERVER_PORT));

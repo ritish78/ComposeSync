@@ -6,7 +6,9 @@ dotenv.config();
 
 module.exports = function (req, res, next) {
     //First, we get the token from header
-    const token = req.header('Authorization');
+    let token = req.header('authorization');
+    console.log({ token });
+    // token = token.replace(/^Bearer\s+/, "");
 
     //Check if no token
     if (!token) {
@@ -15,12 +17,19 @@ module.exports = function (req, res, next) {
 
     //Verify token
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        jwt.verify(
+                    token, 
+                    process.env.JWT_SECRET,
+                    (error, decoded) => {
+                        if (error) console.log('Incorrect token!');
+                        req.user = decoded.user; 
+                        console.log('Decoded user:', decoded);
+                        console.log('Decoded user id:', decoded.user);
+                        next();
+                    }
+        );
 
-        req.user = decoded.user;
-
-        next();
     } catch (error) {
-        res.status(401).json({ message: 'Could not authoize user!' });
+        res.status(401).json({ message: 'Could not authorize user!' });
     }
 }
