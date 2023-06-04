@@ -1,38 +1,174 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+:root {
+    --primary-color: #ca63ff;
+    --secondary-color: #aa00ff;
+    --rale-font: 'Raleway', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    font-family: var(--rale-font);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+a {
+    text-decoration: none;
+    color: #000000;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+a:hover {
+    text-decoration: underline;
+    text-shadow: 1px 1px var(--secondary-color);
+    font-size: 1.01rem;
 }
 
-.App-link {
-  color: #61dafb;
+.buttons {
+    font-family: var(--rale-font);
+    padding: 10px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.buttons:focus {
+    outline: none;
 }
+
+.buttons:active {
+    transform: translateY(1px);
+}
+
+.buttons:hover {
+    text-shadow: 0.5px 0.5px var(--secondary-color);
+}
+
+input {
+    width: 35%;
+    border-radius: 20px;
+    height: 25px;
+    padding-left: 10px;
+    border: 1px solid #ccc;
+    font-family: var(--rale-font)
+}
+
+input:focus {
+    outline: 2px solid var(--secondary-color);
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr;
+    height: 100%;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--primary-color);
+    padding: 10px;
+}
+
+.header-user img {
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+}
+
+.user-details {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.documents-info {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100%;
+    background-color: #f0f0f0;
+}
+
+.create-document {
+    padding: 30px;
+}
+
+.create-document i {
+    font-size: 1.5rem;
+}
+
+.user-document {
+    background-color: lightblue;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 20px 20px 0 20px;
+    margin: 20px 20px 0 20px;
+    height: 100%;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.header-document {
+    display: grid;
+    grid-template-columns: 3fr 2fr 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    font-weight: 900;
+}
+
+.individual-document {
+    display: grid;
+    grid-template-columns: 3fr 2fr 1fr 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+.document-page-container {
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+    height: 100%;
+}
+
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--primary-color);
+    padding: 10px;
+}
+
+
+.user-picture img {
+    width: 50%;
+    height: 30%;
+    border-radius: 50%;
+}
+
+.username-section button {
+    font-size: 1.1rem;
+    border-radius: 7px;
+}
+
+.username-section button:hover {
+    box-shadow: 2px 2px var(--secondary-color);
+}
+
+.bottom-section {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    justify-content: center;
+    height: 75vh;
+}
+
+.last-edited {
+    border-left: 1px solid #000000;
+}
+
+.last-edited h3 {
+    margin-left: 15px;
+}
+
