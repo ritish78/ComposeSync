@@ -4,6 +4,10 @@
     --primary-color: #ca63ff;
     --secondary-color: #aa00ff;
     --rale-font: 'Raleway', sans-serif;
+    --dark-color: #382641;
+    --light-color: #fcfcfc;
+    --danger-color: #f03e3e;
+    --success-color: #178e17;
 }
 
 body {
@@ -172,3 +176,41 @@ input:focus {
     margin-left: 15px;
 }
 
+
+.alert {
+  padding: 0.8rem;
+  margin: 1rem 0;
+  opacity: 0.9;
+  background: var(--light-color);
+  color: #333;
+  border-radius: 5px;
+  box-shadow: 2px 2px #333;
+}
+
+.alert-wrapper {
+  position: fixed;
+  top: 3rem;
+  right: 2rem;
+  display: inline-block;
+}
+
+.alert-light {
+  background: var(--light-color);
+  color: #333;
+}
+
+.alert-danger {
+  background: var(--danger-color);
+  color: #fff;
+}
+
+.alert-success {
+  background: var(--success-color);
+  color: #fff;
+}
+
+.alert-white {
+  background: #fff;
+  color: #333;
+  border: #ccc solid 1px;
+}
