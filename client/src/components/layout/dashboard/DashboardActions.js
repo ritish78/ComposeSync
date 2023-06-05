@@ -5,13 +5,13 @@ const DashboardActions = () => {
         <div className="create-document">
             <p>Create document?</p>
             <form action="submit">
-                <label for="newDocument">
+                <label htmlFor="newDocument">
                     Name for new document:
                 </label>
                 <input type="text" placeholder="Some facts about ...">
                 </input>
                 <button type="submit" className="buttons">
-                    Create
+                    {'  '}Create{'  '}
                     <i className="fa-solid fa-file-circle-plus"></i>
                 </button>
             </form>     

@@ -7,3 +7,6 @@ export const AUTH_ERROR = 'AUTH_ERROR';
 export const LOGIN_SUCCESS = 'LOG_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT = 'LOGOUT';
+export const GET_ALL_DOCUMENTS = 'GET_ALL_DOCUMENTS';
+export const DOCUMENTS_ERROR = 'DOCUMENTS_ERROR';
+export const GET_DOCUMENT_NAME = 'GET_DOCUMENT_NAME';

@@ -28,7 +28,10 @@ router.post('/', auth, async (req, res) => {
 
         //Once the new document is saved in MongoDB, the _id is generated
         //and we can use _id to add it to documents array in 'user' object
-        user.documents.unshift(newDocument._id);
+        user.documents.unshift({
+            document_id: newDocument._id,
+            document_name: newDocument.name
+        });
 
         //Then, updating the current user after adding new document's id
         await user.save();
@@ -139,7 +142,7 @@ router.delete('/:documentId', auth, async (req, res) => {
 
 
 // @route       POST api/documents/:documentId
-// @desc        Update post
+// @desc        Update document
 // @access      Private
 router.post('/:documentId', auth, async (req, res) => {
     try {
@@ -177,6 +180,38 @@ router.post('/:documentId', auth, async (req, res) => {
             return res.status(404).json({ message: 'Could not find the document to update' })
         }
         return res.status(500).send({ message: 'Server Error while trying to update document!' })
+    }
+})
+
+
+
+// @route       GET api/documents/name/:documentId
+// @desc        Get document name by its id
+// @access      Private
+router.get('/name/:documentId', auth, async (req, res) => {
+    try {
+
+        const document = await Document.findById(req.params.documentId);
+
+        if (!document) {
+            return res.status(404).json({ message: 'Document does not exists!' })
+        }
+      
+
+        //Now we check if the current user is the the author of the document
+        //If so, then only we will allow for viewing the document.
+        if (req.user.id == document.user) {
+            return res.status(200).json({ name: document.name })
+        } else {
+            return res.status(401).json({ message: 'User is not authorized to retrieve this document!' })
+        }
+
+    } catch (error) {
+        console.error(error.message);
+        if (error.kind === 'ObjectId') {
+            return res.status(404).json({ message: 'Could not fetch the document!' })
+        }
+        return res.status(500).send({ message: 'Server Error while trying to fetch the document!' })
     }
 })
 

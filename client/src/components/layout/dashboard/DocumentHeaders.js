@@ -5,7 +5,7 @@ const DocumentHeaders = () => {
         <div className="header-document">
             <span>Name</span>
             <span>Author</span>
-            <span>View</span>
+            <span>Created At</span>
             <span>Delete</span>
         </div>
     )
