@@ -5,7 +5,7 @@ import DashboardActions from './DashboardActions';
 import DocumentHeaders from './DocumentHeaders';
 import DocumentItems from './DocumentItems';
 import DashboardTop from './DashboardTop';
-import { getAllDocumentsOfCurrentUser } from '../../../actions/documents';
+import { getAllDocumentsOfCurrentUser, getDocumentById } from '../../../actions/documents';
 import Spinner from '../Spinner';
 
 const Dashboard = props => {
@@ -15,7 +15,11 @@ const Dashboard = props => {
         getAllDocumentsOfCurrentUser();
     }, [getAllDocumentsOfCurrentUser]);
 
-
+    const documentTest = {
+        'name': 'Facts about water',
+        'user': 'Admin',
+        'date': '5/06/2023'
+    }
 
     return (
         <div className="container">
@@ -28,7 +32,8 @@ const Dashboard = props => {
                      (
                         <div>
                             <DocumentHeaders />
-                            <DocumentItems documents={documents}/>
+
+                            <DocumentItems document={documentTest}/>
                         </div>    
                      )
                 }
