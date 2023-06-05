@@ -2,12 +2,14 @@ import axios from 'axios';
 import {
     GET_ALL_DOCUMENTS,
     DOCUMENTS_ERROR,
-    GET_DOCUMENT_NAME
+    GET_DOCUMENT_NAME,
+    GET_DOCUMENT,
+    DOCUMENT_ERROR
 } from './constant';
 
 
-//Get current all documents of current user
-export const getAllDocumentsOfCurrentUser = () => async (dispatch) => {
+//Get current all document id of current user
+export const getAllDocumentsIdOfCurrentUser = () => async (dispatch) => {
     try {
         const res = await axios.get('/api/documents/mine');
 
@@ -28,6 +30,27 @@ export const getAllDocumentsOfCurrentUser = () => async (dispatch) => {
     }
 }
 
+//Get all documents of current user
+export const getAllDocumentsOfCurrentUser = () => async (dispatch) => {
+    try {
+        const res = await axios.get('/api/documents/mine/all');
+
+        console.log('All document id of current user:', res);
+
+        dispatch({
+            type: GET_ALL_DOCUMENTS,
+            payload: res.data
+        })
+    } catch (error) {
+        dispatch({
+            type: DOCUMENTS_ERROR,
+            payload: {
+                message: error.response,
+                status: error.response.status
+            }
+        })
+    }
+}
 
 
 export const getDocumentNameById = (documentId) => async (dispatch) => {
@@ -56,12 +79,12 @@ export const getDocumentById = (documentId) => async (dispatch) => {
         const res = axios.get(`/api/documents/${documentId}`);
 
         dispatch({
-            type: GET_ALL_DOCUMENTS,
+            type: GET_DOCUMENT,
             payload: res.data
         })
     } catch (error) {
         dispatch({
-            type: DOCUMENTS_ERROR,
+            type: DOCUMENT_ERROR,
             payload: {
                 message: error.response,
                 status: error.response.status

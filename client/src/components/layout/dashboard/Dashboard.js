@@ -5,22 +5,22 @@ import DashboardActions from './DashboardActions';
 import DocumentHeaders from './DocumentHeaders';
 import DocumentItems from './DocumentItems';
 import DashboardTop from './DashboardTop';
-import { getAllDocumentsOfCurrentUser, getDocumentById } from '../../../actions/documents';
+import { getAllDocumentsOfCurrentUser  } from '../../../actions/documents';
 import Spinner from '../Spinner';
 
-const Dashboard = props => {
+const Dashboard = (props) => {
     const { getAllDocumentsOfCurrentUser, auth, document: { documents, loading } } = props;
     
     useEffect(() => {
         getAllDocumentsOfCurrentUser();
     }, [getAllDocumentsOfCurrentUser]);
 
-    const documentTest = {
-        'name': 'Facts about water',
-        'user': 'Admin',
-        'date': '5/06/2023'
-    }
-
+    // const documentTest = {
+    //     'name': 'Facts about water',
+    //     'user': 'Admin',
+    //     'date': '5/06/2023'
+    // }
+    
     return (
         <div className="container">
         <DashboardTop />
@@ -32,8 +32,10 @@ const Dashboard = props => {
                      (
                         <div>
                             <DocumentHeaders />
-
-                            <DocumentItems document={documentTest}/>
+                            {
+                                documents.map(document => <DocumentItems key={document._id} document={document} />)
+                            }
+                            
                         </div>    
                      )
                 }
@@ -45,6 +47,7 @@ const Dashboard = props => {
 
 Dashboard.propTypes = {
     getAllDocumentsOfCurrentUser: PropTypes.func.isRequired,
+    // getDocumentById: PropTypes.func.isRequired,   need to add in connect aswell
     auth: PropTypes.object.isRequired
 }
 

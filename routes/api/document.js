@@ -28,10 +28,7 @@ router.post('/', auth, async (req, res) => {
 
         //Once the new document is saved in MongoDB, the _id is generated
         //and we can use _id to add it to documents array in 'user' object
-        user.documents.unshift({
-            document_id: newDocument._id,
-            document_name: newDocument.name
-        });
+        user.documents.unshift(newDocument._id);
 
         //Then, updating the current user after adding new document's id
         await user.save();
@@ -45,7 +42,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 
-// @route       GET api/documents
+// @route       GET api/documents/mine
 // @desc        Get all documents of a user
 // @access      Private
 router.get('/mine', auth, async (req, res) => {
@@ -212,6 +209,36 @@ router.get('/name/:documentId', auth, async (req, res) => {
             return res.status(404).json({ message: 'Could not fetch the document!' })
         }
         return res.status(500).send({ message: 'Server Error while trying to fetch the document!' })
+    }
+})
+
+
+// @route       GET api/documents/mine/all
+// @desc        Get all documents of a user
+// @access      Private
+router.get('/mine/all', auth, async (req, res) => {
+    try {
+        //In our database, 'Users' collection contains all the users
+        //Each 'user' document has 'documents' array which contains the
+        //document id which the same user is associated with.
+
+        //To get all the documents of current user, first we get the current user
+        const user = await User.findById(req.user.id).select('-password');
+        
+        //Then, we can get the documents from the current user's object
+        const documentIds = user.documents;
+
+        let documents = [];
+        for (const document of documentIds) {
+            const documentInfo = await Document.findById(document._id);
+            documents.push(documentInfo);
+        }
+
+        res.json(documents);
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send({ message: 'Error while retrieving documents of current user!' })
     }
 })
 

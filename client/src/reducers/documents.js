@@ -1,7 +1,9 @@
 import {
     GET_ALL_DOCUMENTS,
     DOCUMENTS_ERROR,
-    GET_DOCUMENT_NAME
+    GET_DOCUMENT_NAME,
+    GET_DOCUMENT,
+    DOCUMENT_ERROR
 } from '../actions/constant';
 
 const initialState = {
@@ -23,17 +25,26 @@ export default function documentReducer(state = initialState, action) {
             }
         
         case DOCUMENTS_ERROR:
+        case DOCUMENT_ERROR:
             return {
                 ...state,
                 error: payload,
                 loading: false,
-                document: null
+                document: null,
+                documents: []
             }
         
         case GET_DOCUMENT_NAME:
             return {
                 ...state,
                 documents: payload,
+                loading: false
+            }
+        
+        case GET_DOCUMENT: 
+            return {
+                ...state,
+                document: payload,
                 loading: false
             }
 
