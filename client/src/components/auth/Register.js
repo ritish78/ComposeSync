@@ -45,67 +45,71 @@ const Register = props => {
     }
 
     return (
-        <section className="container">
-            <h1 className="large text-primary">Sign Up</h1>
-            <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
-            <form className="form" onSubmit={e => handleSubmit(e)}>
-                <div className="form-group">
-                <input 
-                        type="text" 
-                        placeholder="Name" 
-                        name="name" 
-                        value={name}
-                        onChange={e => onChange(e)}
-                        required 
-                    />
-                </div>
-                <div className="form-group">
-                <input 
-                        type="email" 
-                        placeholder="Email Address" 
-                        name="email"
-                        value={email}
-                        onChange={e => onChange(e)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                <input 
-                        type="text" 
-                        placeholder="Avatar Url" 
-                        name="avatar"
-                        value={avatar}
-                        onChange={e => onChange(e)}
-                    />
-                </div>
-                <div className="form-group">
-                <input
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    minLength="6"
-                    value={password}
-                    onChange={e => onChange(e)}
-                    required
-                />
-                </div>
-                <div className="form-group">
-                <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    name="password2"
-                    minLength="6"
-                    value={confirmPassword}
-                    onChange={e => onChange(e)}
-                    required
-                />
-                </div>
-                <input type="submit" className="btn btn-primary" value="Register" />
-            </form>
-            <p className="my-1">
-                Already have an account? <Link to="/login">Log In</Link>
-            </p>
-         </section>
+        <body className="login-body">
+            <section className="login-container">
+                <h1 className="large text-primary">Sign Up</h1>
+                <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
+                <form className="form" onSubmit={e => handleSubmit(e)}>
+                    <div className="form-group">
+                        <input 
+                                type="text" 
+                                placeholder="Name" 
+                                name="name" 
+                                value={name}
+                                onChange={e => onChange(e)}
+                                required 
+                            />
+                    </div>
+                    <div className="form-group">
+                        <input 
+                                type="email" 
+                                placeholder="Email Address" 
+                                name="email"
+                                value={email}
+                                onChange={e => onChange(e)}
+                                required
+                            />
+                    </div>
+                    <div className="form-group">
+                        <input 
+                                type="text" 
+                                placeholder="Avatar Url" 
+                                name="avatar"
+                                value={avatar}
+                                onChange={e => onChange(e)}
+                            />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                            minLength="8"
+                            value={password}
+                            onChange={e => onChange(e)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input
+                            type="password"
+                            placeholder="Confirm Password"
+                            name="confirmPassword"
+                            minLength="8"
+                            value={confirmPassword}
+                            onChange={e => onChange(e)}
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="login-button">
+                        Sign Up
+                    </button>    
+                </form>
+                <p className="my-1">
+                    Already have an account? <Link to="/login">Log In</Link>
+                </p>
+            </section>
+         </body>
     )
 }
 
