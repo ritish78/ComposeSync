@@ -31,38 +31,66 @@ const Login = props => {
     }
 
     return (
-        <section className="container">
-        <h1 className="large text-primary">Sign In</h1>
-        <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
-        <form className="form" onSubmit={handleSubmit}>
-            <div className="form-group">
-            <input
-                type="email"
-                placeholder="Email Address"
-                name="email"
-                value={email}
-                onChange={e => onChange(e)}
-                required
-            />
-            </div>
-            <div className="form-group">
-            <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={password}
-                onChange={e => onChange(e)}
-            />
-            </div>
-            <input type="submit" className="btn btn-primary" value="Login" />
-        </form>
-        <p className="my-1">
-            Don't have an account? <Link to="/register">Sign Up</Link>
-        </p>
-    </section>
+        <body className='login-body'>
+            <section className="login-container">
+                <h1 className="large text-primary">Sign In</h1>
+                <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
+                <form className="form" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        {
+                            /**
+                             * Removing the labels as the website looks cleaner
+                             * without the labels. The input already has placeholder
+                             * for user to know about fields to input
+                             */
+                        }
+                        {/* <label
+                            htmlFor="user-email">
+                                <small>Email:</small>
+                        </label> */}
+                        <input
+                            id="user-email"
+                            type="email"
+                            placeholder="Email Address"
+                            name="email"
+                            value={email}
+                            onChange={e => onChange(e)}
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        {/* <label
+                            htmlFor="user-password">
+                                <small>Password:</small>
+                        </label> */}
+                        <input
+                            id="user-password"
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                            value={password}
+                            onChange={e => onChange(e)}
+                        />
+                    </div>
+                    <button type="submit" className="login-button">
+                        Login
+                    </button>
+                </form>
+                <p className="my-1">
+                    Don't have an account? <Link to="/register">Sign Up</Link>
+                </p>
+             </section>
+        </body>
     )
 }
 
-Login.propTypes = {}
+Login.propTypes = {
+    loginUser: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
+}
 
-export default Login
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+})
+
+export default connect(mapStateToProps, { loginUser })(Login)
