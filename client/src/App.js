@@ -14,6 +14,8 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
+import Dashboard from './components/layout/dashboard/Dashboard';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 function App() {
 
@@ -28,8 +30,13 @@ function App() {
       <Router>
         <Alert />
         <Routes>
+          <Route path='/' element={<Login />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route 
+              path='/dashboard'
+              element={<PrivateRoute component={Dashboard} />}
+          />    
         </Routes>
       </Router>
     </Provider>

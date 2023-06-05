@@ -11,7 +11,7 @@ const Login = props => {
         password: ''
     });
 
-    const { login, isAuthenticated } = props;
+    const { loginUser, isAuthenticated } = props;
     const { email, password } = formData;
 
     const onChange = e => setFormData({
@@ -22,7 +22,7 @@ const Login = props => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        login(email, password);
+        loginUser(email, password);
     }
 
     //Redirect to dashboard if user is already logged in
@@ -31,7 +31,7 @@ const Login = props => {
     }
 
     return (
-        <body className='login-body'>
+        <div className='login-body'>
             <section className="login-container">
                 <h1 className="large text-primary">Sign In</h1>
                 <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
@@ -80,7 +80,7 @@ const Login = props => {
                     Don't have an account? <Link to="/register">Sign Up</Link>
                 </p>
              </section>
-        </body>
+        </div>
     )
 }
 

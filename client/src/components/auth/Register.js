@@ -45,7 +45,7 @@ const Register = props => {
     }
 
     return (
-        <body className="login-body">
+        <div className="login-body">
             <section className="login-container">
                 <h1 className="large text-primary">Sign Up</h1>
                 <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
@@ -109,13 +109,13 @@ const Register = props => {
                     Already have an account? <Link to="/login">Log In</Link>
                 </p>
             </section>
-         </body>
+         </div>
     )
 }
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
-    register: PropTypes.func.isRequired,
+    registerUser: PropTypes.func.isRequired,
     isAuthenticated: PropTypes.bool
 }
 
