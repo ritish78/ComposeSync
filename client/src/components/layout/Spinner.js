@@ -1,8 +1,8 @@
 const SpinnerGif = () => {
     return (
-        <div className="container">
-            <i className="fa fa-spinner fa-spin fa-4x"
-                style={{ fontSize: '200px' , marginLeft: '40%', marginTop: '20%'}}
+        <div>
+            <i className="fa fa-spinner fa-spin fa-2x"
+                style={{ fontSize: '100px' , marginLeft: '40%', marginTop: '10%'}}
             >
             </i>
         </div>

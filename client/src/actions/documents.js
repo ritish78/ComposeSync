@@ -4,7 +4,8 @@ import {
     DOCUMENTS_ERROR,
     GET_DOCUMENT_NAME,
     GET_DOCUMENT,
-    DOCUMENT_ERROR
+    DOCUMENT_ERROR,
+    DOCUMENT_LOADING
 } from './constant';
 
 
@@ -32,6 +33,10 @@ export const getAllDocumentsIdOfCurrentUser = () => async (dispatch) => {
 
 //Get all documents of current user
 export const getAllDocumentsOfCurrentUser = () => async (dispatch) => {
+    dispatch({
+        type: DOCUMENT_LOADING
+    });
+    
     try {
         const res = await axios.get('/api/documents/mine/all');
 

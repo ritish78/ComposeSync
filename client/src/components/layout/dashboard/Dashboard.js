@@ -7,6 +7,7 @@ import DocumentItems from './DocumentItems';
 import DashboardTop from './DashboardTop';
 import { getAllDocumentsOfCurrentUser  } from '../../../actions/documents';
 import Spinner from '../Spinner';
+import DocumentEmpty from './DocumentEmpty';
 
 const Dashboard = (props) => {
     const { getAllDocumentsOfCurrentUser, auth, document: { documents, loading } } = props;
@@ -28,13 +29,19 @@ const Dashboard = (props) => {
             <DashboardActions />
             <div className="user-document">
                 {
-                    loading && documents === null ? <Spinner /> :
-                     (
+                    loading && documents ? (
+                        <Spinner /> 
+                    ) : (
                         <div>
                             <DocumentHeaders />
                             {
-                                documents.map(document => <DocumentItems key={document._id} document={document} />)
-                            }
+                                documents && documents.length > 0 ? ( 
+                                    documents.map(document => (
+                                        <DocumentItems key={document._id} document={document} />
+                                    ))
+                                ) : (
+                                    !loading && <DocumentEmpty />
+                            )}
                             
                         </div>    
                      )
