@@ -16,6 +16,7 @@ import {
 } from 'react-router-dom';
 import Dashboard from './components/layout/dashboard/Dashboard';
 import PrivateRoute from './components/routing/PrivateRoute';
+import DocumentPage from './components/layout/document/DocumentPage';
 
 function App() {
 
@@ -36,6 +37,10 @@ function App() {
           <Route 
               path='/dashboard'
               element={<PrivateRoute component={Dashboard} />}
+          />
+          <Route
+              path='/document/:documentId'
+              element={<PrivateRoute component={DocumentPage} />}
           />    
         </Routes>
       </Router>

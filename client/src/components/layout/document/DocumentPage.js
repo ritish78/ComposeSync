@@ -1,20 +1,26 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import DocumentTop from './DocumentTop';
+import { connect } from 'react-redux';
+import { getDocumentById } from '../../../actions/documents';
+import { useParams } from 'react-router-dom';
 
-const Document = props => {
+const DocumentPage = props => {
+
+    const { auth, document, getDocumentById } = props;
+    const { documentId } = useParams();
+
+    useEffect(() => {
+        getDocumentById(documentId)
+    }, [getDocumentById, documentId]);
+
+    console.log({auth});
+    console.log({document});
+
     return (
         <div className="document-page-container">
             <section className="top-section">
-                <div className="username-section">
-                    <h2>Some Facts</h2>
-                    <p><span>Test User,</span> is editing.</p>
-                    <button id="save-document" className="buttons">
-                        Save <i className="fa-solid fa-floppy-disk"></i>
-                    </button>
-                </div>
-                <div className="user-picture">
-                    <img src="https://eu.ui-avatars.com/api/?name=John+Doe&size=250" alt="user profile"/>
-                </div>
+                <DocumentTop />
             </section>
             <section className="bottom-section">
                 <div className="editor-container">
@@ -42,6 +48,15 @@ const Document = props => {
     )
 }
 
-Document.propTypes = {}
+DocumentPage.propTypes = {
+    auth: PropTypes.object,
+    document: PropTypes.object,
+    getDocumentById: PropTypes.func.isRequired
+}
 
-export default Document
+const mapStateToProps = state => ({
+    auth: state.auth,
+    document: state.document
+})
+
+export default connect(mapStateToProps,  { getDocumentById })(DocumentPage);

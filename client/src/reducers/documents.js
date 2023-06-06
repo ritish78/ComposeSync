@@ -4,7 +4,8 @@ import {
     GET_DOCUMENT_NAME,
     GET_DOCUMENT,
     DOCUMENT_ERROR,
-    DOCUMENT_LOADING
+    DOCUMENT_LOADING,
+    CREATE_DOCUMENT
 } from '../actions/constant';
 
 const initialState = {
@@ -45,6 +46,14 @@ export default function documentReducer(state = initialState, action) {
         case GET_DOCUMENT: 
             return {
                 ...state,
+                document: payload,
+                loading: false
+            }
+        
+        case CREATE_DOCUMENT:
+            return {
+                ...state,
+                // document: [payload, ...state.document],
                 document: payload,
                 loading: false
             }

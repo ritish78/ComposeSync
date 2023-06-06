@@ -5,8 +5,10 @@ import {
     GET_DOCUMENT_NAME,
     GET_DOCUMENT,
     DOCUMENT_ERROR,
-    DOCUMENT_LOADING
+    DOCUMENT_LOADING,
+    CREATE_DOCUMENT
 } from './constant';
+import { setAlert } from './alert';
 
 
 //Get current all document id of current user
@@ -60,7 +62,7 @@ export const getAllDocumentsOfCurrentUser = () => async (dispatch) => {
 
 export const getDocumentNameById = (documentId) => async (dispatch) => {
     try {
-        const res = axios.get(`/api/documents/name/${documentId}`);
+        const res = await axios.get(`/api/documents/name/${documentId}`);
 
         dispatch({
             type: GET_DOCUMENT_NAME,
@@ -81,7 +83,7 @@ export const getDocumentNameById = (documentId) => async (dispatch) => {
 
 export const getDocumentById = (documentId) => async (dispatch) => {
     try {
-        const res = axios.get(`/api/documents/${documentId}`);
+        const res = await axios.get(`/api/documents/${documentId}`);
 
         dispatch({
             type: GET_DOCUMENT,
@@ -97,6 +99,40 @@ export const getDocumentById = (documentId) => async (dispatch) => {
         })
     }
 }
+
+
+export const createDocument = (nameOfDocument) => async (dispatch) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const res = await axios.post('/api/documents', nameOfDocument, config);
+
+        // const newDocument = res.data;
+
+        dispatch({
+            type: CREATE_DOCUMENT,
+            payload: res.data
+        })
+
+        return res.data;
+        // dispatch(
+        //     setAlert('Document created!', 'success')
+        // )
+    } catch (error) {
+        dispatch({
+            type: DOCUMENT_ERROR,
+            payload: {
+                message: error.response,
+                status: error.response.status
+            }
+        })
+    }
+}
+
 
 /**
  * The below function is made to get all the documents of current
