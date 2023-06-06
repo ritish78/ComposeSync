@@ -35,7 +35,7 @@ const Dashboard = (props) => {
                         <div>
                             <DocumentHeaders />
                             {
-                                documents && documents.length > 0 ? ( 
+                                documents && documents.length > 0 && document ? ( 
                                     documents.map(document => (
                                         <DocumentItems key={document._id} document={document} />
                                     ))

@@ -5,7 +5,8 @@ import {
     GET_DOCUMENT,
     DOCUMENT_ERROR,
     DOCUMENT_LOADING,
-    CREATE_DOCUMENT
+    CREATE_DOCUMENT,
+    DELETE_DOCUMENT
 } from '../actions/constant';
 
 const initialState = {
@@ -55,6 +56,13 @@ export default function documentReducer(state = initialState, action) {
                 ...state,
                 // document: [payload, ...state.document],
                 document: payload,
+                loading: false
+            }
+        
+        case DELETE_DOCUMENT:
+            return {
+                ...state,
+                documents: state.documents.filter(document => document._id !== payload),
                 loading: false
             }
         

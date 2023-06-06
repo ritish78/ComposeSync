@@ -6,7 +6,8 @@ import {
     GET_DOCUMENT,
     DOCUMENT_ERROR,
     DOCUMENT_LOADING,
-    CREATE_DOCUMENT
+    CREATE_DOCUMENT,
+    DELETE_DOCUMENT
 } from './constant';
 import { setAlert } from './alert';
 
@@ -125,6 +126,30 @@ export const createDocument = (nameOfDocument) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DOCUMENT_ERROR,
+            payload: {
+                message: error.response,
+                status: error.response.status
+            }
+        })
+    }
+}
+
+
+export const deleteDocumentById = (documentId) => async (dispatch) => {
+    try {
+        const res = await axios.delete(`/api/documents/${documentId}`);
+
+        console.log('Deleted document of id:', documentId);
+        console.log(res.data);
+
+        dispatch({
+            type: DELETE_DOCUMENT,
+            payload: documentId
+        })
+    
+    } catch (error) {
+        dispatch({
+            type: DOCUMENTS_ERROR,
             payload: {
                 message: error.response,
                 status: error.response.status
