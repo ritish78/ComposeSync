@@ -5,13 +5,13 @@ import { connect } from 'react-redux';
 
 const DashboardTop = (props) => {
 
-    const { logoutUser } = props;
+    const { logoutUser, auth } = props;
 
     return (
         <section className="header-user">
             <div className="user-details">
-                <img src="https://eu.ui-avatars.com/api/?name=John+Doe&size=250" alt="user profile"/>
-                <p>Hello, <span className="username">John Doe</span></p>
+                <img src={auth.user.avatar} alt="user profile"/>
+                <p>Hello, <span className="username">{auth.user.name}</span></p>
             </div>
             <div className="logout-user">
                 <a onClick={logoutUser} href="#!">
@@ -24,8 +24,12 @@ const DashboardTop = (props) => {
 }
 
 DashboardTop.propTypes = {
-    logoutUser: PropTypes.func.isRequired
+    logoutUser: PropTypes.func.isRequired,
 }
 
+const mapStateToProps = state => ({
+    auth: state.auth,
+})
 
-export default connect(null, { logoutUser })(DashboardTop);
+
+export default connect(mapStateToProps, { logoutUser })(DashboardTop);
