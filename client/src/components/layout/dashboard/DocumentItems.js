@@ -11,10 +11,10 @@ const DocumentItems = (props) => {
     return (
         <div>
             <div className="individual-document">
-                <span><a href="#">{document.name}</a></span>
+                <span><Link to={`/document/${document._id}`}>{document.name}</Link></span>
                 {
                     auth.user.name === document.author ? 
-                        (<span>You</span>) : (<span>document.author</span>)
+                        (<span>You</span>) : (<span>{document.author}</span>)
                 }
                 <span>{formatDate(document.date, false)}</span>
                 {

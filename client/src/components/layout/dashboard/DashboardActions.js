@@ -14,6 +14,8 @@ const DashboardActions = (props) => {
     const onSubmitHandler = e => {
         e.preventDefault();
 
+        //We are creating a document and we receive the document back
+        //Then we navigate to /document/:documentId of the created document
         createDocument({ name: documentName })
             .then(document => navigate(`/document/${document._id}`));
 

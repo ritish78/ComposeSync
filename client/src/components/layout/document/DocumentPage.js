@@ -4,6 +4,7 @@ import DocumentTop from './DocumentTop';
 import { connect } from 'react-redux';
 import { getDocumentById } from '../../../actions/documents';
 import { useParams } from 'react-router-dom';
+import DocumentEdited from './DocumentEdited';
 
 const DocumentPage = props => {
 
@@ -14,13 +15,19 @@ const DocumentPage = props => {
         getDocumentById(documentId)
     }, [getDocumentById, documentId]);
 
-    console.log({auth});
-    console.log({document});
-
+    // console.log({auth});
+    // console.log(document);
+    // console.log(document.name);
+    console.log(document);
+    console.log();
+    
     return (
         <div className="document-page-container">
             <section className="top-section">
-                <DocumentTop />
+                {
+                    document && document.document ? 
+                            <DocumentTop documentName={document.document.name} /> : ''
+                }
             </section>
             <section className="bottom-section">
                 <div className="editor-container">
@@ -28,20 +35,7 @@ const DocumentPage = props => {
                 </div>
                 <div className="last-edited">
                     <h3>Last Edited:</h3>
-                    <ol>
-                        <li>
-                            <p>Test User</p>
-                            <p>(2 Jan, 2023)</p>
-                        </li>
-                        <li>
-                            <p>Another User</p>
-                            <p>(2 Jan, 2023)</p>
-                        </li>
-                        <li>
-                            <p>Test User</p>
-                            <p>(3 Jan, 2023)</p>
-                        </li>
-                    </ol>
+                    <DocumentEdited edited={document.edited}/>
                 </div>
             </section>
         </div>
