@@ -15,10 +15,10 @@ router.post('/', auth, async (req, res) => {
         // console.log(req.body.name, req.body.data, req.user.id)
         const user = await User.findById(req.user.id).select('-password');
 
-        console.log(req.user);
 
         const newDocument = new Document({
             name: req.body.name,
+            author: user.name,
             data: req.body.data,
             user: req.user.id
         });
@@ -112,16 +112,26 @@ router.get('/:documentId', auth, async (req, res) => {
 router.delete('/:documentId', auth, async (req, res) => {
     try {
         const document = await Document.findById(req.params.documentId);
-
+        
         if (!document) {
             return res.status(404).json({ message: 'Document does not exists!' })
         }
-
+        
         //Now we check if the current user is the the author of the document
         //If so, then only we will allow for deleting the document.
         if (req.user.id !== document.user.toString()) {
             return res.status(401).json({ message: 'User is not authorized to delete this document!' })
         }
+
+        //User object also have record of user's documents in documents[] array.
+        //The array contains the document id's the user has created.
+        const user = await User.findById(req.user.id).select('-password');
+        const indexToDelete = user.documents.findIndex(document => document._id.toString() === req.params.documentId);
+        if (indexToDelete !== -1) {
+            user.documents.splice(indexToDelete, 1);
+        }
+        await user.save();
+
 
         //Finally, after checking if the document exists and then checking if the
         //current user is the author of the document, we can delete the document
@@ -229,10 +239,19 @@ router.get('/mine/all', auth, async (req, res) => {
         const documentIds = user.documents;
 
         let documents = [];
-        for (const document of documentIds) {
-            const documentInfo = await Document.findById(document._id);
-            documents.push(documentInfo);
+        for (let i = 0; i < documentIds.length; i++) {
+            const documentInfo = await Document.findById(documentIds[i]._id);
+            if (documentInfo !== null) {
+                documents.push(documentInfo);
+            } 
+            // else {
+            //     documentIds.splice(i, 1);
+            //     i--;
+            // }
         }
+
+        user.documents = documentIds;
+        await user.save();
 
         res.json(documents);
 

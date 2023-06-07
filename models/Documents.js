@@ -5,6 +5,10 @@ const DocumentSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectID,
         ref: 'user'
     },
+    author: {
+        type: String,
+        required: true
+    },
     name: {
         type: String
     },
