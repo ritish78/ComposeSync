@@ -137,10 +137,7 @@ export const createDocument = (nameOfDocument) => async (dispatch) => {
 
 export const deleteDocumentById = (documentId) => async (dispatch) => {
     try {
-        const res = await axios.delete(`/api/documents/${documentId}`);
-
-        console.log('Deleted document of id:', documentId);
-        console.log(res.data);
+        await axios.delete(`/api/documents/${documentId}`);
 
         dispatch({
             type: DELETE_DOCUMENT,

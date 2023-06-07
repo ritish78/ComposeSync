@@ -24,6 +24,7 @@ export default function documentReducer(state = initialState, action) {
             return {
                 ...state,
                 documents: payload,
+                document: null,
                 loading: false
             }
         
@@ -48,6 +49,7 @@ export default function documentReducer(state = initialState, action) {
             return {
                 ...state,
                 document: payload,
+                documents: null,
                 loading: false
             }
         

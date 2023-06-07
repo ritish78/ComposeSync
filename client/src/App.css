@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
 
 :root {
-    --primary-color: #ca63ff;
-    --secondary-color: #aa00ff;
+    --primary-color: #e0bfB8;
+    --secondary-color: #cc7777;
     --rale-font: 'Raleway', sans-serif;
     --dark-color: #382641;
     --light-color: #fcfcfc;
@@ -23,8 +23,9 @@ a {
 }
 
 a:hover {
+    color: var(--secondary-color);
     text-decoration: underline;
-    text-shadow: 1px 1px var(--secondary-color);
+    /* text-shadow: 1px 1px var(--secondary-color); */
     font-size: 1.01rem;
 }
 

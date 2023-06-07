@@ -15,12 +15,18 @@ const DocumentPage = props => {
         getDocumentById(documentId)
     }, [getDocumentById, documentId]);
 
-    // console.log({auth});
-    // console.log(document);
-    // console.log(document.name);
-    console.log(document);
-    console.log();
-    
+    const testEdited = [
+        {
+            user: 'Admin',
+            date: '2023-06-05T12:42:40.454+00:00'
+        },
+        {
+            user: 'Random User',
+            date: '2023-06-05T12:42:40.454+00:00'
+        }
+
+    ]
+
     return (
         <div className="document-page-container">
             <section className="top-section">
@@ -35,7 +41,18 @@ const DocumentPage = props => {
                 </div>
                 <div className="last-edited">
                     <h3>Last Edited:</h3>
-                    <DocumentEdited edited={document.edited}/>
+                    {
+                        //Here, we are checking if document exists first, then we check if the document.document has values
+                        //and if so, then we again check if edited field exists. And if edited field exists then
+                        //we check the length of it since it is an array. If no edits is done, we return 'No Edits'
+                        // document && document.document && document.document.edited && document.document.edited.length > 0 ? 
+                        document ?
+                            (<ol>
+                                {/* <DocumentEdited edited={document.document.edited}/> */}
+                                <DocumentEdited edited={testEdited}/>
+                            </ol> 
+                            ) : ('No Edits') 
+                    }
                 </div>
             </section>
         </div>
