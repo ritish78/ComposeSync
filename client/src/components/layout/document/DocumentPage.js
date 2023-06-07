@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { getDocumentById } from '../../../actions/documents';
 import { useParams } from 'react-router-dom';
 import DocumentEdited from './DocumentEdited';
+import TextEditor from '../texteditor/TextEditor';
 
 const DocumentPage = props => {
 
@@ -36,8 +37,8 @@ const DocumentPage = props => {
                 }
             </section>
             <section className="bottom-section">
-                <div className="editor-container">
-
+                <div className="editor-container" id="text-editor">
+                    <TextEditor />
                 </div>
                 <div className="last-edited">
                     <h3>Last Edited:</h3>

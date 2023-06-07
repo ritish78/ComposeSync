@@ -11,7 +11,7 @@ const DocumentEdited = props => {
     return (
         edited.map(edit => {
             return (
-                <li>
+                <li key = {Math.random() * 10000}>
                     <p>{edit.user}</p>
                     <p>{formatDate(edit.date, true)}</p>
                 </li>
