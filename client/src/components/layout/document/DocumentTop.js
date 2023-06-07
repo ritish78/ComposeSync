@@ -7,6 +7,19 @@ const DocumentTop = (props) => {
 
     const { auth, documentName } = props;
 
+    const toggleEditHistory = e => {
+        const bottomSection = document.querySelector('#bottom-container');
+        const lastEditedSection = document.querySelector('#last-edited-container');
+
+        if (bottomSection.classList.contains('bottom-section')) {
+            bottomSection.classList.replace('bottom-section', 'bottom-section-hidden');
+            lastEditedSection.classList.replace('last-edited', 'last-edited-hidden');
+        } else {
+            bottomSection.classList.replace('bottom-section-hidden', 'bottom-section');
+            lastEditedSection.classList.replace('last-edited-hidden', 'last-edited');
+        }
+    }
+
     return (
         <>
             <div className="username-section">
@@ -17,6 +30,13 @@ const DocumentTop = (props) => {
                 </Link>{'  '}
                 <button id="save-document" className="buttons">
                     Save <i className="fa-solid fa-floppy-disk"></i>
+                </button>{'  '}
+                <button 
+                    id="toggle-last-edited" 
+                    className="buttons"
+                    onClick={e => toggleEditHistory()}
+                >
+                    Edit History <i className="fa-solid fa-user-pen"></i>
                 </button>
             </div>
             <div className="user-picture">

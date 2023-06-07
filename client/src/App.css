@@ -134,7 +134,7 @@ input:focus {
 
 .document-page-container {
     display: grid;
-    grid-template-rows: 1fr 3fr;
+    /* grid-template-rows: 1fr 3fr; */
     height: 100%;
 }
 
@@ -171,6 +171,14 @@ input:focus {
 
 .last-edited {
     border-left: 1px solid #000000;
+}
+
+.last-edited-hidden {
+    display: none;
+}
+
+.bottom-section-hidden {
+    grid-template-columns: 1fr;
 }
 
 .last-edited h3 {

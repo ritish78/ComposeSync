@@ -36,11 +36,11 @@ const DocumentPage = props => {
                             <DocumentTop documentName={document.document.name} /> : ''
                 }
             </section>
-            <section className="bottom-section">
+            <section id="bottom-container" className="bottom-section">
                 <div className="editor-container" id="text-editor">
                     <TextEditor />
                 </div>
-                <div className="last-edited">
+                <div id="last-edited-container" className="last-edited">
                     <h3>Last Edited:</h3>
                     {
                         //Here, we are checking if document exists first, then we check if the document.document has values
