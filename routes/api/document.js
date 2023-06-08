@@ -167,15 +167,15 @@ router.post('/:documentId', auth, async (req, res) => {
         }
 
         //Getting the values from request body
-        const { name, data, sharedWith } = req.body;
+        // const { name, data, sharedWith } = req.body;
+        const { data } = req.body;
 
-        document.name = name;
+        // document.name = name;
         document.data = data;
         document.edited.push({
             user: req.user.id,
             date: Date.now()
         });
-        document.sharedWith = sharedWith;
     
         await document.save();
 
