@@ -1,10 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { TOOLBAR_OPTIONS } from './ToolbarOptions';
 
 const TextEditor = props => {
+
+    const { data } = props;
+    const [quill, setQuill] = useState();
+
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return;
         
@@ -13,7 +17,7 @@ const TextEditor = props => {
         wrapper.innerHTML = '';
         const editorContainer = document.createElement('div');
         wrapper.append(editorContainer);
-        new Quill(editorContainer, 
+        const newQuill = new Quill(editorContainer, 
                     { 
                         theme: 'snow',
                         modules: {
@@ -22,7 +26,14 @@ const TextEditor = props => {
                     }
         );
 
+        setQuill(newQuill);
     }, []);
+
+    useEffect(() => {
+        if (quill == null) return;
+        quill.setText(data);
+        // quill.setContents(data);
+    }, [quill, data]);
 
     return (
         <div id="text" ref={wrapperRef}></div>

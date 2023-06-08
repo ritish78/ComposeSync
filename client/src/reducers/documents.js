@@ -7,7 +7,8 @@ import {
     DOCUMENT_LOADING,
     CREATE_DOCUMENT,
     DELETE_DOCUMENT,
-    UPDATE_DOCUMENT
+    UPDATE_DOCUMENT,
+    CLEAR_DOCUMENT
 } from '../actions/constant';
 
 const initialState = {
@@ -79,6 +80,14 @@ export default function documentReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: true
+            }
+        
+        case CLEAR_DOCUMENT:
+            return {
+                ...state,
+                document: null,
+                documents: [],
+                loading: false
             }
 
         default:

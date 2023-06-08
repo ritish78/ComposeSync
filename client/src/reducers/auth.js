@@ -35,10 +35,11 @@ export default function authReducer(state = initialState, action) {
         case AUTH_ERROR:
             localStorage.removeItem('token');
             return {
-                ...state,
+                // ...state,
                 token: null,
                 isAuthenticated: false,
-                loading: false
+                loading: false,
+                user: null
             }
         
         case USER_LOADED:

@@ -38,7 +38,10 @@ const DocumentPage = props => {
             </section>
             <section id="bottom-container" className="bottom-section-hidden">
                 <div className="editor-container" id="text-editor">
-                    <TextEditor />
+                    {
+                        document && document.document && 
+                            <TextEditor data={document.document.data}/>
+                    }
                 </div>
                 <div id="last-edited-container" className="last-edited-hidden">
                     <h3>Last Edited:</h3>
