@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import DocumentTop from './DocumentTop';
 import { connect } from 'react-redux';
@@ -36,11 +36,11 @@ const DocumentPage = props => {
                             <DocumentTop documentName={document.document.name} /> : ''
                 }
             </section>
-            <section id="bottom-container" className="bottom-section">
+            <section id="bottom-container" className="bottom-section-hidden">
                 <div className="editor-container" id="text-editor">
                     <TextEditor />
                 </div>
-                <div id="last-edited-container" className="last-edited">
+                <div id="last-edited-container" className="last-edited-hidden">
                     <h3>Last Edited:</h3>
                     {
                         //Here, we are checking if document exists first, then we check if the document.document has values

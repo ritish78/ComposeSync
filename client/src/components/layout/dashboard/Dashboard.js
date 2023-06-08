@@ -32,8 +32,8 @@ const Dashboard = (props) => {
                     loading && documents ? (
                         <Spinner /> 
                     ) : (
-                        <div>
-                            <DocumentHeaders />
+                        <div className="created-documents-section">
+                            {/* <DocumentHeaders /> */}
                             {
                                 documents && documents.length > 0 && document ? ( 
                                     documents.map(document => (

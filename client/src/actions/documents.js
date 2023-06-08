@@ -7,7 +7,8 @@ import {
     DOCUMENT_ERROR,
     DOCUMENT_LOADING,
     CREATE_DOCUMENT,
-    DELETE_DOCUMENT
+    DELETE_DOCUMENT,
+    UPDATE_DOCUMENT
 } from './constant';
 import { setAlert } from './alert';
 
@@ -147,6 +148,32 @@ export const deleteDocumentById = (documentId) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: DOCUMENTS_ERROR,
+            payload: {
+                message: error.response,
+                status: error.response.status
+            }
+        })
+    }
+}
+
+
+export const updateDocumentById = (editorData) => async (dispatch) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const res = await axios.post(`api/documents/${editorData.documentId}`, editorData.data, config);
+
+        dispatch({
+            type: UPDATE_DOCUMENT,
+            payload: editorData.documentId
+        })
+    } catch (error) {
+        dispatch({
+            type: DOCUMENT_ERROR,
             payload: {
                 message: error.response,
                 status: error.response.status

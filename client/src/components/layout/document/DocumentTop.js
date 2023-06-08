@@ -23,7 +23,7 @@ const DocumentTop = (props) => {
     return (
         <>
             <div className="username-section">
-                <h2>{documentName}</h2>
+                <p>Title: <span>{documentName}</span></p>
                 <p><span>{auth.user.name},</span> is editing.</p>
                 <Link to='/dashboard'>
                     Dashboard <i className="fa-solid fa-arrow-left"></i>
