@@ -170,14 +170,22 @@ router.post('/:documentId', auth, async (req, res) => {
 
         //Getting the values from request body
         // const { name, data, sharedWith } = req.body;
-        const { data } = req.body;
+        const { data, savedUsingButton } = req.body;
+
+        console.log('Data in api/documents: ', data);
+        console.log('Saved user in api/documents: ', savedUsingButton);
 
         // document.name = name;
         document.data = data;
-        document.edited.push({
-            user: req.user.id,
-            date: Date.now()
-        });
+        //We are adding to the edit history only if user updates by clicking on
+        //the save button. We won't save edit history if autosaved by react, as
+        //it will lead to countless editedWith of same user.
+        if (savedUsingButton) {
+            document.edited.push({
+                user: req.user.id,
+                date: Date.now()
+            });
+        }
     
         await document.save();
 

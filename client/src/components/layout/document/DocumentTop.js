@@ -2,12 +2,13 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { updateDocumentById } from "../../../actions/documents";
 
 const DocumentTop = (props) => {
 
-    const { auth, documentName } = props;
+    const { auth, documentName, updateDocumentById, onSave } = props;
 
-    const toggleEditHistory = e => {
+    const toggleEditHistory = () => {
         const bottomSection = document.querySelector('#bottom-container');
         const lastEditedSection = document.querySelector('#last-edited-container');
 
@@ -20,6 +21,10 @@ const DocumentTop = (props) => {
         }
     }
 
+    const handleSave = () => {
+        onSave();
+    }
+
     return (
         <>
             <div className="username-section">
@@ -28,13 +33,17 @@ const DocumentTop = (props) => {
                 <Link to='/dashboard'>
                     Dashboard <i className="fa-solid fa-arrow-left"></i>
                 </Link>{'  '}
-                <button id="save-document" className="buttons">
+                <button 
+                    id="save-document" 
+                    className="buttons"
+                    onClick={() => handleSave()}
+                >
                     Save <i className="fa-solid fa-floppy-disk"></i>
                 </button>{'  '}
                 <button 
                     id="toggle-last-edited" 
                     className="buttons"
-                    onClick={e => toggleEditHistory()}
+                    onClick={() => toggleEditHistory()}
                 >
                     Edit History <i className="fa-solid fa-user-pen"></i>
                 </button>
@@ -48,11 +57,12 @@ const DocumentTop = (props) => {
 
 DocumentTop.propTypes = {
     auth: PropTypes.object,
-    documentName: PropTypes.string.isRequired
+    documentName: PropTypes.string.isRequired,
+    updateDocumentById: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     auth: state.auth
 })
 
-export default connect(mapStateToProps)(DocumentTop);
+export default connect(mapStateToProps, { updateDocumentById })(DocumentTop);

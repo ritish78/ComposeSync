@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 const TextEditor = props => {
 
-    const { data, documentId, updateDocumentById } = props;
+    const { data, documentId, updateDocumentById, setData } = props;
     const [quill, setQuill] = useState();
 
     const wrapperRef = useCallback((wrapper) => {
@@ -37,14 +37,20 @@ const TextEditor = props => {
         if (quill == null) return;
         // quill.setText(data);
         quill.setContents(data);
-    }, [quill, data]);
+        setData(data);
+    }, [quill, setData, data]);
 
     //This useEffect is to save data to the database.
     useEffect(() => {
         if (quill == null) return;
 
         const interval = setInterval(() => {
-            updateDocumentById(documentId, { data: quill.getContents() });
+            updateDocumentById(
+                    documentId, 
+                    { 
+                        data: quill.getContents(),
+                        savedUsingButton: false 
+                    });
             console.log('Updated Document for:', documentId)
         }, DOCUMENT_SAVE_INTERVAL_MS);
 
@@ -52,6 +58,15 @@ const TextEditor = props => {
             clearInterval(interval);
         }
     }, [quill, documentId, updateDocumentById]);
+
+
+    //This useEffect is to update textEditorData in DocumentPage.
+    //We will use it for 'Save' button.
+    useEffect(() => {
+        if (quill == null) return;
+
+        setData(quill.getContents())
+    }, [quill, setData])
 
     return (
         <div id="text" ref={wrapperRef}></div>
