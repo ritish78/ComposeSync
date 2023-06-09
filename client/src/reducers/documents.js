@@ -64,10 +64,7 @@ export default function documentReducer(state = initialState, action) {
             }
         
         case UPDATE_DOCUMENT:
-            return {
-                ...state,
-                document: [payload, ...state.document]
-            }
+            return state;
         
         case DELETE_DOCUMENT:
             return {

@@ -84,6 +84,10 @@ export const getDocumentNameById = (documentId) => async (dispatch) => {
 
 
 export const getDocumentById = (documentId) => async (dispatch) => {
+    dispatch({
+        type: DOCUMENT_LOADING
+    });
+    
     try {
         const res = await axios.get(`/api/documents/${documentId}`);
 
@@ -157,7 +161,7 @@ export const deleteDocumentById = (documentId) => async (dispatch) => {
 }
 
 
-export const updateDocumentById = (editorData) => async (dispatch) => {
+export const updateDocumentById = (documentId, data) => async (dispatch) => {
     try {
         const config = {
             headers: {
@@ -165,18 +169,23 @@ export const updateDocumentById = (editorData) => async (dispatch) => {
             }
         }
 
-        const res = await axios.post(`api/documents/${editorData.documentId}`, editorData.data, config);
+        console.log(documentId, {data});
+
+        console.log('Updating document from actions/documents.js:', documentId);
+        const res = await axios.post(`api/documents/${documentId}`, JSON.stringify(data), config);
+        console.log('Update successful:', res.data);
 
         dispatch({
             type: UPDATE_DOCUMENT,
-            payload: editorData.documentId
+            payload: documentId
         })
     } catch (error) {
+        console.log('Could not update document', documentId, JSON.stringify(data));
         dispatch({
             type: DOCUMENT_ERROR,
             payload: {
                 message: error.response,
-                status: error.response.status
+                status: error.message
             }
         })
     }
