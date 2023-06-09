@@ -174,10 +174,11 @@ export const updateDocumentById = (documentId, data) => async (dispatch) => {
         console.log('Updating document from actions/documents.js:', documentId);
         const res = await axios.post(`/api/documents/${documentId}`, JSON.stringify(data), config);
         console.log('Update successful:', res.data);
+        console.log('res.data.data', res.data.data);
 
         dispatch({
             type: UPDATE_DOCUMENT,
-            payload: documentId
+            payload: res.data
         })
     } catch (error) {
         console.log('Could not update document', documentId, JSON.stringify(data));

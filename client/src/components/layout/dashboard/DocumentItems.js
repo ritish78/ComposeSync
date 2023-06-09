@@ -19,7 +19,14 @@ const DocumentItems = (props) => {
                     Author: <span>{auth.user.name === document.author ? 'You' : document.author}</span>
                 </p>
                 <p>Created on: <span>{formatDate(document.date, false)}</span></p>
-                {document.data ? document.data : 'Write on the document for few lines from the document to appear here.'}
+                {/*
+                     The below line of code is to have 2/3 sentences of the document visible on the card
+                     on the dashboard, and if the document is empty then we display the string from else 
+                     statement. We went from storing contents of document in text to objects. So, we can
+                     not have document.data in it. Substituting it with different text if document empty
+                */}
+                {/* {document.data ? document.data : 'Write on the document for few lines from the document to appear here.'} */}
+                <small>{document.data ? '': '(Empty Document)'}</small>
             </div>
             <div className="document-options">
             <Link to={`/document/${document._id}`}>

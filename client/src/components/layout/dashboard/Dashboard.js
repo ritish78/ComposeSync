@@ -21,6 +21,7 @@ const Dashboard = (props) => {
     //     'user': 'Admin',
     //     'date': '5/06/2023'
     // }
+    if (!auth.user) return;
     
     return (
         <div className="container">
@@ -54,7 +55,6 @@ const Dashboard = (props) => {
 
 Dashboard.propTypes = {
     getAllDocumentsOfCurrentUser: PropTypes.func.isRequired,
-    // getDocumentById: PropTypes.func.isRequired,   need to add in connect aswell
     auth: PropTypes.object.isRequired
 }
 

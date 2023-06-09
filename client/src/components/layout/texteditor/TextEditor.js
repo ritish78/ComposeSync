@@ -59,7 +59,7 @@ const TextEditor = props => {
 }
 
 TextEditor.propTypes = {
-    data: PropTypes.string,
+    data: PropTypes.object,
     updateDocumentById: PropTypes.func.isRequired
 }
 

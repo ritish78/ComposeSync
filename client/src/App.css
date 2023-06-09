@@ -104,6 +104,10 @@ input:focus {
     margin-bottom: 20px;
 }
 
+.document-info small {
+    font-style: italic;
+}
+
 .create-document {
     padding: 30px;
 }

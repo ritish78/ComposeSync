@@ -105,6 +105,6 @@ export const loginUser = (email, password) => async (dispatch) => {
 
 //Logout
 export const logoutUser = () => (dispatch) => {
-    dispatch({ type: LOGOUT });
     dispatch({ type: CLEAR_DOCUMENT });
+    dispatch({ type: LOGOUT });
 }
