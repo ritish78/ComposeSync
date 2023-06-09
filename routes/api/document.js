@@ -19,7 +19,8 @@ router.post('/', auth, async (req, res) => {
         const newDocument = new Document({
             name: req.body.name,
             author: user.name,
-            data: req.body.data,
+            // data: req.body.data,
+            data: '',
             user: req.user.id
         });
 
@@ -159,6 +160,7 @@ router.post('/:documentId', auth, async (req, res) => {
             return res.status(404).json({ message: 'Document does not exists!' })
         }
       
+        console.log('Document found:', document);
 
         //Now we check if the current user is the the author of the document
         //If so, then only we will allow for updating the document.
