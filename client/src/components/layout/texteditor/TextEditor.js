@@ -35,8 +35,8 @@ const TextEditor = props => {
     //This useEffect is to load text data from the database
     useEffect(() => {
         if (quill == null) return;
-        quill.setText(data);
-        // quill.setContents(data);
+        // quill.setText(data);
+        quill.setContents(data);
     }, [quill, data]);
 
     //This useEffect is to save data to the database.
@@ -44,7 +44,7 @@ const TextEditor = props => {
         if (quill == null) return;
 
         const interval = setInterval(() => {
-            updateDocumentById(documentId, { data: quill.getText() });
+            updateDocumentById(documentId, { data: quill.getContents() });
             console.log('Updated Document for:', documentId)
         }, DOCUMENT_SAVE_INTERVAL_MS);
 

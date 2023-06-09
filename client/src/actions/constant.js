@@ -17,4 +17,4 @@ export const CREATE_DOCUMENT = 'CREATE_DOCUMENT';
 export const DELETE_DOCUMENT = 'DELETE_DOCUMENT';
 export const UPDATE_DOCUMENT = 'UPDATE_DOCUMENT';
 export const CLEAR_DOCUMENT = 'CLEAR_DOCUMENT';
-export const DOCUMENT_SAVE_INTERVAL_MS = 1000;
+export const DOCUMENT_SAVE_INTERVAL_MS = 60000;     //Document is saved automatically in 60 seconds

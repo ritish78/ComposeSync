@@ -87,7 +87,7 @@ export const getDocumentById = (documentId) => async (dispatch) => {
     dispatch({
         type: DOCUMENT_LOADING
     });
-    
+
     try {
         const res = await axios.get(`/api/documents/${documentId}`);
 
@@ -172,7 +172,7 @@ export const updateDocumentById = (documentId, data) => async (dispatch) => {
         console.log(documentId, {data});
 
         console.log('Updating document from actions/documents.js:', documentId);
-        const res = await axios.post(`api/documents/${documentId}`, JSON.stringify(data), config);
+        const res = await axios.post(`/api/documents/${documentId}`, JSON.stringify(data), config);
         console.log('Update successful:', res.data);
 
         dispatch({
