@@ -6,7 +6,7 @@ import { updateDocumentById } from "../../../actions/documents";
 
 const DocumentTop = (props) => {
 
-    const { auth, documentName, updateDocumentById, onSave } = props;
+    const { auth, documentName, updateDocumentById } = props;
 
     const toggleEditHistory = () => {
         const bottomSection = document.querySelector('#bottom-container');
@@ -21,9 +21,9 @@ const DocumentTop = (props) => {
         }
     }
 
-    const handleSave = () => {
-        onSave();
-    }
+    // const handleSave = () => {
+    //     onSave();
+    // }
 
     return (
         <>
@@ -36,7 +36,6 @@ const DocumentTop = (props) => {
                 <button 
                     id="save-document" 
                     className="buttons"
-                    onClick={() => handleSave()}
                 >
                     Save <i className="fa-solid fa-floppy-disk"></i>
                 </button>{'  '}

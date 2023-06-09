@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import DocumentTop from './DocumentTop';
 import { connect } from 'react-redux';
@@ -9,7 +9,6 @@ import TextEditor from '../texteditor/TextEditor';
 
 const DocumentPage = props => {
 
-    const [textEditorData, setTextEditorData] = useState();
 
     const { auth, document, getDocumentById } = props;
     const { documentId } = useParams();
@@ -29,28 +28,28 @@ const DocumentPage = props => {
         }
     ]
 
-    const handleSave = () => {
-        updateDocumentById(
-            documentId,
-            {
-                textEditorData,
-                savedUsingButton: true 
-            })
-    }
+    // const handleSave = () => {
+    //     updateDocumentById(
+    //         documentId,
+    //         {
+    //             textEditorData,
+    //             savedUsingButton: true 
+    //         })
+    // }
 
     return (
         <div className="document-page-container">
             <section className="top-section">
                 {
                     document && document.document ? 
-                            <DocumentTop documentName={document.document.name} onSave={handleSave}/> : ''
+                            <DocumentTop documentName={document.document.name} /> : ''
                 }
             </section>
             <section id="bottom-container" className="bottom-section-hidden">
                 <div className="editor-container" id="text-editor">
                     {
                         document && document.document && 
-                            <TextEditor data={document.document.data} documentId={documentId} setData={setTextEditorData}/>
+                            <TextEditor data={document.document.data} documentId={documentId} />
                     }
                 </div>
                 <div id="last-edited-container" className="last-edited-hidden">
