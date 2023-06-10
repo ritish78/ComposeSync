@@ -456,6 +456,63 @@ input:focus {
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
 }
 
+#text .ql-toolbar.ql-snow span select {
+    color: var(--secondary-color);
+}
+
+#text .ql-toolbar.ql-snow span > svg polygon:hover {
+    stroke: var(--secondary-color);
+    fill: var(--secondary-color);
+}
+
+
+/* polygon:hover {
+    stroke: var(--secondary-color) !important;
+} */
+
+#text .ql-toolbar.ql-snow span > span:hover {
+    color: var(--secondary-color);
+}
+
+
+#text .ql-toolbar.ql-snow button:hover svg path {
+    stroke: var(--secondary-color) !important;
+}
+
+#text .ql-toolbar.ql-snow button:hover svg line {
+    stroke: var(--secondary-color) !important;
+}
+
+#text .ql-toolbar.ql-snow button:hover svg rect {
+    stroke: var(--secondary-color) !important;
+}
+
+#text .ql-toolbar.ql-snow span span:hover svg line {
+    stroke: var(--secondary-color);
+}
+
+#text .ql-toolbar.ql-snow span span:hover svg polyline {
+    stroke: var(--secondary-color);
+}
+
+#text .ql-toolbar.ql-snow span span:hover svg g {
+    stroke: var(--primary-color);
+}
+
+#text .ql-toolbar.ql-snow button:hover svg circle {
+    fill: var(--secondary-color);
+}
+
+#text .ql-toolbar.ql-snow button:hover svg polyline {
+    fill: var(--secondary-color);
+    stroke: var(--secondary-color);
+}
+
+#text .ql-toolbar.ql-snow button:hover svg rect {
+    stroke: var(--secondary-color) !important;
+}
+
+
 
 @page {
     margin: 2cm;
