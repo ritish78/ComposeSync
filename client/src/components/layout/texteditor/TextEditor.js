@@ -64,8 +64,8 @@ const TextEditor = props => {
     // useEffect(() => {
     //     if (quill == null) return;
 
-    //     setData(quill.getContents())
-    // }, [quill, setData])
+    //     handleSaveFromButton(quill.getContents);
+    // }, [quill, handleSaveFromButton])
 
     return (
         <div id="text" ref={wrapperRef}></div>

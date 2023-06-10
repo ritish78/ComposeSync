@@ -21,6 +21,9 @@ const DocumentSchema = mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'user'
             },
+            name: {
+                type: String
+            },
             date: {
                 type: Date,
                 default: Date.now

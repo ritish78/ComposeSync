@@ -28,11 +28,11 @@ const DocumentPage = props => {
         }
     ]
 
-    // const handleSave = () => {
+    // const handleSaveFromButton = (contents) => {
     //     updateDocumentById(
     //         documentId,
     //         {
-    //             textEditorData,
+    //             contents,
     //             savedUsingButton: true 
     //         })
     // }
@@ -62,7 +62,10 @@ const DocumentPage = props => {
                         document ?
                             (<ol>
                                 {/* <DocumentEdited edited={document.document.edited}/> */}
-                                <DocumentEdited edited={testEdited}/>
+                                {
+                                    document && document.document && document.document.edited &&
+                                        <DocumentEdited edited={document.document.edited}/>
+                                }
                             </ol> 
                             ) : ('No Edits') 
                     }

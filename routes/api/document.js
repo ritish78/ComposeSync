@@ -183,6 +183,7 @@ router.post('/:documentId', auth, async (req, res) => {
         if (savedUsingButton) {
             document.edited.push({
                 user: req.user.id,
+                name: req.user.name,
                 date: Date.now()
             });
         }
