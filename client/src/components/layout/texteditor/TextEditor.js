@@ -6,11 +6,22 @@ import { TOOLBAR_OPTIONS } from './ToolbarOptions';
 import { DOCUMENT_SAVE_INTERVAL_MS } from '../../../actions/constant';
 import { updateDocumentById } from '../../../actions/documents';
 import { connect } from 'react-redux';
+import  { io } from 'socket.io-client';
 
 const TextEditor = props => {
 
-    const { data, documentId, updateDocumentById } = props;
+    const { data, documentId, updateDocumentById, setTextEditorData } = props;
     const [quill, setQuill] = useState();
+    const [socket, setSocket] = useState();
+
+    useEffect(() => {
+        const socket = io('http://localhost:5000');
+        setSocket(socket);
+    
+        return () => {
+            socket.disconnect()
+        }
+    }, [])
 
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return;
@@ -34,41 +45,105 @@ const TextEditor = props => {
 
     //This useEffect is to load text data from the database
     useEffect(() => {
-        if (quill == null) return;
-        // quill.setText(data);
-        quill.setContents(data);
-    }, [quill, data]);
+        if (quill == null || socket == null) return;
+        socket.once('load-document', () => {
+            quill.setContents(data);
+            setTextEditorData(data);
+        });
+
+        socket.emit('get-document', { data, documentId });
+    }, [quill, setTextEditorData, data, socket, documentId]);
 
     //This useEffect is to save data to the database.
     useEffect(() => {
-        if (quill == null) return;
+        if (quill == null || socket == null) return;
 
         const interval = setInterval(() => {
             updateDocumentById(
-                    documentId, 
-                    { 
-                        data: quill.getContents(),
-                        savedUsingButton: false 
-                    });
+                documentId, 
+                { 
+                    data: quill.getContents(),
+                    savedUsingButton: false 
+                }
+            );
             console.log('Updated Document for:', documentId)
+            
+            
+            socket.emit('save-document', { documentId, 
+                                            data:quill.getContents()});
+
         }, DOCUMENT_SAVE_INTERVAL_MS);
 
         return () => {
             clearInterval(interval);
         }
-    }, [quill, documentId, updateDocumentById]);
+    }, [quill, documentId, updateDocumentById, socket]);
 
+
+    //This useEffect is to handle changes in document done by another user
+    useEffect(() => {
+        if (quill == null || socket == null) return;
+
+        const changeHandler = change => {
+            quill.updateContents(change);
+        }
+
+        socket.on('receive-changes', changeHandler);
+
+        return () => {
+            socket.off('receive-changes', changeHandler)
+        }
+    }, [quill, socket]);
+
+    //This useEffect is to push update of document by current user
+    useEffect(() => {
+        if (quill == null || socket == null) return;
+
+        const changeHandler = (delta, oldDelta, source) => {
+            if (source !== 'user') return;
+            socket.emit('send-changes', { documentId, delta })
+        }
+
+        quill.on('text-change', changeHandler);
+
+        return () => {
+            quill.off('text-change', changeHandler)
+        }
+    }, [quill, socket, documentId]);
+
+
+    useEffect(() => {
+        if (quill == null || socket == null) return;
+
+        socket.on('save-document', documentContents => {
+            quill.setContents(documentContents);
+        })
+    }, [quill, socket])
 
     //This useEffect is to update textEditorData in DocumentPage.
     //We will use it for 'Save' button.
     // useEffect(() => {
     //     if (quill == null) return;
 
-    //     handleSaveFromButton(quill.getContents);
-    // }, [quill, handleSaveFromButton])
+    //     setTextEditorData(quill.getContents());
+    // }, [quill, setTextEditorData])
+
+    const saveDocumentUsingButton = () => {
+        updateDocumentById(
+            documentId, 
+            { 
+                data: quill.getContents(),
+                savedUsingButton: true 
+            });
+    }
 
     return (
-        <div id="text" ref={wrapperRef}></div>
+        <div id="quill-container">
+            <button id="save-document" onClick={saveDocumentUsingButton}>
+                Save
+            </button>
+            <div id="text" ref={wrapperRef}></div>
+        </div>
     )
 }
 

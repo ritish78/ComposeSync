@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import DocumentTop from './DocumentTop';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ import TextEditor from '../texteditor/TextEditor';
 
 const DocumentPage = props => {
 
-
+    const [textEditorData, setTextEditorData] = useState();
     const { auth, document, getDocumentById } = props;
     const { documentId } = useParams();
 
@@ -28,28 +28,30 @@ const DocumentPage = props => {
         }
     ]
 
-    // const handleSaveFromButton = (contents) => {
-    //     updateDocumentById(
-    //         documentId,
-    //         {
-    //             contents,
-    //             savedUsingButton: true 
-    //         })
-    // }
+    const handleSaveFromButton = () => {
+        console.log('Inside DocumentPage: ', {textEditorData});
+        updateDocumentById(
+            documentId,
+            {
+                data: textEditorData,
+                savedUsingButton: true 
+            });
+        console.log('document update successful from layout/document');
+    }
 
     return (
         <div className="document-page-container">
             <section className="top-section">
                 {
                     document && document.document ? 
-                            <DocumentTop documentName={document.document.name} /> : ''
+                            <DocumentTop documentName={document.document.name} handleSaveFromButton={handleSaveFromButton} textEditorData={textEditorData}/> : ''
                 }
             </section>
             <section id="bottom-container" className="bottom-section-hidden">
                 <div className="editor-container" id="text-editor">
                     {
                         document && document.document && 
-                            <TextEditor data={document.document.data} documentId={documentId} />
+                            <TextEditor data={document.document.data} documentId={documentId} setTextEditorData={setTextEditorData}/>
                     }
                 </div>
                 <div id="last-edited-container" className="last-edited-hidden">
