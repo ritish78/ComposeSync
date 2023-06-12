@@ -22,12 +22,13 @@ const UserSchema = new mongoose.Schema({
             user: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'user'
-            },
-            // documentName: {
-            //     type: String
-            // }
+            }
         }
     ],
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
     date: {
         type: Date,
         default: Date.now

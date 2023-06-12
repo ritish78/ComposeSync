@@ -1,5 +1,7 @@
 const express = require('express');
 const auth = require('../../middleware/auth');
+const authRole = require('../../middleware/isAdmin');
+const ROLES = require('../../models/Roles');
 
 const router = express.Router();
 
@@ -257,14 +259,7 @@ router.get('/mine/all', auth, async (req, res) => {
             if (documentInfo !== null) {
                 documents.push(documentInfo);
             } 
-            // else {
-            //     documentIds.splice(i, 1);
-            //     i--;
-            // }
         }
-
-        user.documents = documentIds;
-        await user.save();
 
         res.json(documents);
 
@@ -275,13 +270,19 @@ router.get('/mine/all', auth, async (req, res) => {
 })
 
 /**
- * Only for development purpose, as we don't want other to get all the documents.
+ * Only for Admin, as we don't want other to get all the documents.
  */
 // @route       GET api/documents/users/all
 // @desc        Get all documents of a user
-// @access      Private
-router.get('/users/all', auth, async (req, res) => {
+// @access      Admin
+router.get('/users/all', auth, authRole(ROLES.ADMIN), async (req, res) => {
     try {
+        const currentUser = await User.findById(req.user.id);
+
+        // if (!currentUser.isAdmin) {
+        //     return res.status(403).json({ message: 'User is not authorized!' });
+        // }
+
         const page = req.query.page ? parseInt(req.query.page) : 1;
         const limit = req.query.limit ? parseInt(req.query.limit) : DOCUMENTS_PER_PAGE;
 
