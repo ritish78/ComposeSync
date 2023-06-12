@@ -6,6 +6,8 @@ const router = express.Router();
 const User = require('../../models/Users');
 const Document = require('../../models/Documents');
 
+const DOCUMENTS_PER_PAGE = 6;
+
 
 // @route       POST api/documents
 // @desc        Create a document
@@ -271,5 +273,79 @@ router.get('/mine/all', auth, async (req, res) => {
         res.status(500).send({ message: 'Error while retrieving documents of current user!' })
     }
 })
+
+/**
+ * Only for development purpose, as we don't want other to get all the documents.
+ */
+// @route       GET api/documents/users/all
+// @desc        Get all documents of a user
+// @access      Private
+router.get('/users/all', auth, async (req, res) => {
+    try {
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const limit = req.query.limit ? parseInt(req.query.limit) : DOCUMENTS_PER_PAGE;
+
+        const numberOfDocumentsToSkip = (page - 1) * limit;
+
+        let documents = await Document.find().skip(numberOfDocumentsToSkip).limit(limit);
+
+        res.json(documents);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send({ message: 'Error while retrieving all documents!' })
+    }
+})
+
+
+
+// @route       GET api/documents/mine/select?page=:pageNumbner&limit=:limit
+// @desc        Get specified number of documents of a user
+// @access      Private
+router.get('/mine/select', auth, async (req, res) => {
+    try {
+        //In our database, 'Users' collection contains all the users
+        //Each 'user' document has 'documents' array which contains the
+        //document id which the same user is associated with.
+
+        //To get all the documents of current user, first we get the current user
+        const user = await User.findById(req.user.id).select('-password');
+        
+        //Then, we can get the documents from the current user's object
+        const documentIds = user.documents;
+
+        //E.g. localhost:5000/api/documents/select?page=1&limit=5
+        // Or localhost:5000/api/documents/mine/select?page=2
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const limit = req.query.limit ? parseInt(req.query.limit) : DOCUMENTS_PER_PAGE;
+
+        let numberOfDocumentsToSkip = (page - 1) * limit;
+        let endOfDocuments = numberOfDocumentsToSkip + limit;
+        // let endOfDocuments = numberOfDocumentsToSkip + DOCUMENTS_PER_PAGE;
+        if (endOfDocuments > documentIds.length) endOfDocuments = documentIds.length;
+
+        let documents = [];
+        for (numberOfDocumentsToSkip; numberOfDocumentsToSkip < endOfDocuments; numberOfDocumentsToSkip++) {
+            const documentInfo = await Document.findById(documentIds[numberOfDocumentsToSkip]._id);
+            if (documentInfo !== null) {
+                documents.push(documentInfo);
+            } 
+        }
+        /**
+         * In the above code where we implemented pagination, we could also implement
+         * by: await Document.find().skip(numberOfDocumentsToSkip).limit(limit);
+         * providing the userId in the where clause, but once we start to have
+         * thousands of documents, the find() will start to take much longer to
+         * get the documents as it has to loop through thousands of documents
+         * to reach the 'limit' that we provided.
+         */
+
+        res.json(documents);
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send({ message: 'Error while retrieving documents of current user!' })
+    }
+})
+
 
 module.exports = router;
