@@ -93,11 +93,14 @@ export const loginUser = (email, password) => async (dispatch) => {
         toast.success('Welcome!');
         dispatch(loadUser());
     } catch (error) {
-        toast.error('Invalid Credentials!');
-        const errors = error.response.data.errors;
-
-        if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.message, 'danger')))
+        if (error.response.status === 429) {
+            toast.error(error.response.data.message);
+        } else {
+            toast.error('Invalid Credentials!');
+            const errors = error.response.data.errors;
+            if (errors) {
+                errors.forEach(error => toast.error(error.message));
+            }
         }
 
         dispatch({

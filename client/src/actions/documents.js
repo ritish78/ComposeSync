@@ -50,6 +50,7 @@ export const getAllDocumentsOfCurrentUser = () => async (dispatch) => {
             payload: res.data
         })
     } catch (error) {
+        toast.error(error.message);
         dispatch({
             type: DOCUMENTS_ERROR,
             payload: {

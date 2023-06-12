@@ -6,6 +6,9 @@ const http = require('http');
 const cors = require('cors');
 dotenv.config();
 
+const rateLimiter = require('./middleware/rate-limiter');
+const connectRedis = require('./config/redis'); 
+
 const app = express();
 const httpServer = http.createServer(app);
 
@@ -15,6 +18,7 @@ connectToMongoDB();
 //Intiliazing middleware
 app.use(express.json({ extended: false }));
 app.use(cors());
+app.use(rateLimiter);
 
 const EXPRESS_SERVER_PORT = process.env.EXPRESS_SERVER_PORT;
 

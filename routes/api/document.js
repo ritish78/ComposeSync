@@ -337,9 +337,17 @@ router.get('/mine/select', auth, async (req, res) => {
          * thousands of documents, the find() will start to take much longer to
          * get the documents as it has to loop through thousands of documents
          * to reach the 'limit' that we provided.
+         * 
+         *  const query = Document.where({ user: req.user.id });
+         *  documents = await query.find().skip(numberOfDocumentsToSkip).limit(limit);
+         * 
          */
 
-        res.json(documents);
+        const lastPage = Math.ceil(documentIds.length / limit);
+        const hasNextPage = page < lastPage;
+        const hasPreviousPage = page > 1 && page <= lastPage;
+        
+        res.json({ hasNextPage, hasPreviousPage, lastPage, documents });
 
     } catch (error) {
         console.error(error.message);
