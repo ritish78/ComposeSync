@@ -10,6 +10,7 @@ import {
     LOGOUT,
     CLEAR_DOCUMENT
 } from './constant';
+import { toast } from 'react-toastify';
 import setAuthToken from '../utils/setAuthToken';
 
 
@@ -46,21 +47,22 @@ export const registerUser = ({ name, email, avatar, password }) => async (dispat
     const body = JSON.stringify({ name, email, avatar, password });
 
     try {
-
+        
         const res = await axios.post('/api/users', body, config);
 
         dispatch({
             type: REGISTER_SUCCESS,
             payload: res.data
         });
-
+        toast.success('Registration successful!');
         dispatch(loadUser());
 
     } catch (error) {
+        // toast.error('Invalid input in fields!');
         const errors = error.response.data.errors;
 
         if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.message, 'danger')));
+            errors.forEach(error => toast.error(error.message));
         }
 
         dispatch({
@@ -88,8 +90,10 @@ export const loginUser = (email, password) => async (dispatch) => {
             payload: res.data
         });
 
+        toast.success('Welcome!');
         dispatch(loadUser());
     } catch (error) {
+        toast.error('Invalid Credentials!');
         const errors = error.response.data.errors;
 
         if (errors) {
@@ -107,4 +111,5 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const logoutUser = () => (dispatch) => {
     dispatch({ type: CLEAR_DOCUMENT });
     dispatch({ type: LOGOUT });
+    toast.success('Logged Out!');
 }

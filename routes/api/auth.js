@@ -27,8 +27,8 @@ router.get('/', auth, async (req, res) => {
 // @desc        Authenticate user and get jwt
 // @access      Private
 router.post('/', [
-    check('email', 'Email is required!').isEmail(),
-    check('password', 'Please enter a valid password').exists()
+    check('email', 'Email is required!').isEmail().normalizeEmail(),
+    check('password', 'Please enter a valid password').exists().trim()
 ], async (req, res) => {
 
     const errors = validationResult(req);

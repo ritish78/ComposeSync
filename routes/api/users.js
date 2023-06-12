@@ -14,9 +14,9 @@ const User = require('../../models/Users');
 // @desc        Register user
 // @access      Public
 router.post('/', [
-    check('name', 'Username is required').not().isEmpty(),
-    check('email', 'Valid email is required').isEmail(),
-    check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8 })
+    check('name', 'Username is required').not().isEmpty().trim(),
+    check('email', 'Valid email is required').isEmail().normalizeEmail(),
+    check('password', 'Please enter a password with 8 or more characters').isLength({ min: 8 }).trim()
 ], async (req, res) => {
     const errors = validationResult(req);
 

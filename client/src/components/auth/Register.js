@@ -4,7 +4,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
-
+import { toast } from 'react-toastify';
 
 const Register = props => {
 
@@ -29,7 +29,8 @@ const Register = props => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setAlert('Passwords do not match', 'danger');
+            // setAlert('Passwords do not match', 'danger');
+            toast.error('Passwords do not match!');
         } else {
             registerUser({
                 name,

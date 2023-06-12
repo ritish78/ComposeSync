@@ -10,8 +10,7 @@ import {
     DELETE_DOCUMENT,
     UPDATE_DOCUMENT
 } from './constant';
-import { setAlert } from './alert';
-
+import { toast } from 'react-toastify';
 
 //Get current all document id of current user
 export const getAllDocumentsIdOfCurrentUser = () => async (dispatch) => {
@@ -119,6 +118,7 @@ export const createDocument = (nameOfDocument) => async (dispatch) => {
 
         // const newDocument = res.data;
 
+        toast.success('Document Created!');
         dispatch({
             type: CREATE_DOCUMENT,
             payload: res.data
@@ -129,6 +129,7 @@ export const createDocument = (nameOfDocument) => async (dispatch) => {
         //     setAlert('Document created!', 'success')
         // )
     } catch (error) {
+        toast.error('Could not create document!');
         dispatch({
             type: DOCUMENT_ERROR,
             payload: {
@@ -142,14 +143,27 @@ export const createDocument = (nameOfDocument) => async (dispatch) => {
 
 export const deleteDocumentById = (documentId) => async (dispatch) => {
     try {
+        const resolveAfterTwoSeconds = new Promise(resolve => setTimeout(resolve, 2000));
+        toast.promise(
+            resolveAfterTwoSeconds,
+            {
+                pending: 'Deleting Document!',
+                success: 'Document Deleted!',
+                error: 'Could not delete document!'     
+            }
+        );
+
         await axios.delete(`/api/documents/${documentId}`);
 
+        
         dispatch({
             type: DELETE_DOCUMENT,
             payload: documentId
-        })
+        });
+
     
     } catch (error) {
+        toast.error('Document deletion unsuccessful!');
         dispatch({
             type: DOCUMENTS_ERROR,
             payload: {
@@ -177,12 +191,15 @@ export const updateDocumentById = (documentId, data) => async (dispatch) => {
         // console.log('res.data.data', res.data.data);
 
         console.log('Updated using button? ', data.savedUsingButton);
-
+        if (data.savedUsingButton) {
+            toast.success('Document Saved!');
+        }
         dispatch({
             type: UPDATE_DOCUMENT,
             payload: res.data
         })
     } catch (error) {
+        toast.error('Document update unsuccessful!');
         console.log('Could not update document', documentId, JSON.stringify(data));
         dispatch({
             type: DOCUMENT_ERROR,

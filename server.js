@@ -38,10 +38,6 @@ io.on('connection', socket => {
     socket.on('get-document', documentInfo => {
         socket.join(documentInfo.documentId);
         socket.emit('load-document', documentInfo.data);
-
-        // socket.on('save-document', (data) => {
-        //     socket.broadcast.to(documentInfo.documentId).emit('save-document', data);
-        // })
     })
     socket.on('send-changes', documentInfo => {
         socket.broadcast.to(documentInfo.documentId).emit('receive-changes', documentInfo.delta);
