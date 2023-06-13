@@ -8,7 +8,8 @@ import {
     DOCUMENT_LOADING,
     CREATE_DOCUMENT,
     DELETE_DOCUMENT,
-    UPDATE_DOCUMENT
+    UPDATE_DOCUMENT,
+    DOCUMENT_SHARED
 } from './constant';
 import { toast } from 'react-toastify';
 
@@ -109,17 +110,27 @@ export const getDocumentById = (documentId) => async (dispatch) => {
 
 export const createDocument = (nameOfDocument) => async (dispatch) => {
     try {
+        const resolveAfterTwoSeconds = new Promise(resolve => setTimeout(resolve, 2000));
+        toast.promise(
+            resolveAfterTwoSeconds,
+            {
+                pending: 'Creating Document!',
+                success: 'Document Created!',
+                error: 'Could not create document!'     
+            }
+        );
+
         const config = {
             headers: {
                 'Content-Type': 'application/json'
             }
         }
 
+        //Artificial Delay of two seconds before finally creating the document
+        await resolveAfterTwoSeconds;
         const res = await axios.post('/api/documents', nameOfDocument, config);
 
         // const newDocument = res.data;
-
-        toast.success('Document Created!');
         dispatch({
             type: CREATE_DOCUMENT,
             payload: res.data
@@ -209,6 +220,27 @@ export const updateDocumentById = (documentId, data) => async (dispatch) => {
                 status: error.message
             }
         })
+    }
+}
+
+export const shareDocumentByEmail = ({ documentId, email }) => async (dispatch) => {
+    try {
+        await axios.post(`/api/documents/share/${documentId}/${email}`, null);
+
+        console.log('Shared Document with: ', email);
+
+        dispatch({
+            type: DOCUMENT_SHARED,
+            payload: email
+        })
+        
+       
+        toast.success(`Document shared with ${email}`);
+    } catch (error) {
+        if (error.response.status === 409) {
+            toast.error('Document already shared with user')
+        }
+        toast.error(error.response);
     }
 }
 

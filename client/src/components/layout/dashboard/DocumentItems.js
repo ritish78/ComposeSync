@@ -1,30 +1,37 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 // import { getDocumentById } from '../../../actions/documents';
 import { connect } from 'react-redux';
 import formatDate from '../../../utils/formatDate';
-import { deleteDocumentById } from '../../../actions/documents';
+import { deleteDocumentById, shareDocumentByEmail } from '../../../actions/documents';
 
 const DocumentItems = (props) => {
-    const { document, auth, deleteDocumentById } = props;
-    const modalContainerRef = useRef(null);
+    const { document, auth, deleteDocumentById, shareDocumentByEmail } = props;
+    const [sharedWithEmail, setSharedWithEmail] = useState('');
+    const shareModalContainerRef = useRef(null);
+    const deleteModalContainerRef = useRef(null);
     
-    const displayModalHandler = () => {
-        if (modalContainerRef.current) {
-            modalContainerRef.current.style.display = 'block';
+    const displayModalHandler = (modalRef) => {
+        if (modalRef.current) {
+            modalRef.current.style.display = 'block';
         }
     }
 
-    const closeModalHandler = () => {
-        modalContainerRef.current.style.display = 'none';
+    const closeModalHandler = (modalRef) => {
+        modalRef.current.style.display = 'none';
     }
 
-    // window.addEventListener('click', (e) => {
-    //     if (e.target === modalContainer) {
-    //         modalContainer.style.display = 'none';
-    //     }
-    // })
+    const onSubmitHandler = e => {
+        e.preventDefault();
+
+        shareDocumentByEmail({
+            documentId: document._id,
+            email: sharedWithEmail
+        }).then(closeModalHandler(shareModalContainerRef));
+        setSharedWithEmail('');
+    }
+
 
     return (
         <div className="document-card">
@@ -49,27 +56,62 @@ const DocumentItems = (props) => {
             <Link to={`/document/${document._id}`}>
                 <i className="fa-solid fa-eye"></i>
             </Link>
-            <Link to='/dashboard'>
-                <i className="fa-solid fa-share-nodes"></i>
-            </Link>
+            <div>
+                <i 
+                    id="open-modal"
+                    onClick={() => displayModalHandler(shareModalContainerRef)}
+                    className="fa-solid fa-share-nodes"></i>
+                <div 
+                id="modal-container"
+                ref={shareModalContainerRef}>
+                    <div id="modal">
+                        <div className="modal-top-info">
+                            <p className="create-info">Share document with other user</p>
+                            <i  id="close-modal"
+                                onClick={() => closeModalHandler(shareModalContainerRef)}
+                                className="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div className="modal-bottom-form">
+                            <form onSubmit={e => onSubmitHandler(e)}>
+                                <label htmlFor="newDocument">
+                                    Email to share the document with:
+                                </label>
+                                <input 
+                                        type="email" 
+                                        placeholder="example@email.com"
+                                        value={sharedWithEmail}
+                                        onChange={e => setSharedWithEmail(e.target.value)}
+                                        required
+                                >
+                                </input>
+                                <button type="submit" className="create-document-button">
+                                    {'  '}Share{'  '}
+                                    <i className="fa-solid fa-share-nodes"></i>
+                                </button>
+                            </form>     
+                        </div>
+                    </div>
+
+            </div>
+            </div>
                 {auth.user.name === document.author ? (
                     <>    
                         <i  id="open-modal"
-                            onClick={displayModalHandler}
+                            onClick={() => displayModalHandler(deleteModalContainerRef)}
                             className="fa-solid fa-trash"></i>
                         
                                 <div id="modal-container"
-                                    ref={modalContainerRef}>
+                                    ref={deleteModalContainerRef}>
                                     <div id="modal">
                                         <div className="modal-top-info">
                                             <p>Delete document?</p>
                                             <i  id="close-modal"
-                                                onClick={closeModalHandler}
+                                                onClick={() => closeModalHandler(deleteModalContainerRef)}
                                                 className="fa-solid fa-circle-xmark"></i>
                                         </div>
                                         <div className="modal-bottom-info">
                                             <div>
-                                                <p> Are you sure you want to delete {document.name}?</p>
+                                                <p> Are you sure you want to delete <span>{document.name}</span>?</p>
                                             </div>
                                             <div className="modal-button-container">
                                                 <button  
@@ -79,7 +121,7 @@ const DocumentItems = (props) => {
                                                 </button>
                                                 <button 
                                                         className="cancel-button"
-                                                        onClick={closeModalHandler}>
+                                                        onClick={() => closeModalHandler(deleteModalContainerRef)}>
                                                     Cancel
                                                 </button>
 
@@ -104,11 +146,12 @@ const DocumentItems = (props) => {
 DocumentItems.propTypes = {
     auth: PropTypes.object.isRequired,
     document: PropTypes.object.isRequired,
-    deleteDocumentById: PropTypes.func.isRequired
+    deleteDocumentById: PropTypes.func.isRequired,
+    shareDocumentByEmail: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
     auth: state.auth
 })
 
-export default connect(mapStateToProps, { deleteDocumentById })(DocumentItems);
+export default connect(mapStateToProps, { deleteDocumentById, shareDocumentByEmail })(DocumentItems);

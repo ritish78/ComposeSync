@@ -270,13 +270,18 @@ input:focus {
     margin-bottom: 10px;
 }
 
+.modal-bottom-info > div > p > span {
+    color: var(--secondary-color);
+}
+
 .modal-button-container {
     display: flex;
     justify-content: flex-end;
 }
 
 .confirm-delete-button,
-.cancel-button {
+.cancel-button,
+.modal-bottom-form button{
     font-family: var(--rale-font);
     padding: 10px;
     outline: none;
@@ -305,6 +310,50 @@ input:focus {
     background-color: var(--secondary-color);
     color: #ffffff;
 }
+
+#close-modal:hover {
+    color: var(--secondary-color);
+    cursor: pointer;
+}
+
+.create-info {
+    color: var(--secondary-color) !important;
+}
+
+.modal-bottom-form {
+    margin-top: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.modal-bottom-form input {
+    width: 95%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.create-document-button {
+    margin-top: 25px;
+    background-color: var(--primary-color);
+}
+
+.create-document-button:hover {
+    background-color: var(--secondary-color);
+    color: #ffffff;
+}
+  
   
 
 @keyframes animatemodal {

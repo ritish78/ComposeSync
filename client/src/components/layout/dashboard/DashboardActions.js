@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createDocument } from '../../../actions/documents';
 
 const DashboardActions = (props) => {
 
     const [documentName, setDocumentName] = useState('');
+    const modalContainerRef = useRef(null);
 
     const { createDocument } = props;
     const navigate = useNavigate();
@@ -23,26 +24,55 @@ const DashboardActions = (props) => {
         setDocumentName('');
     }
 
+    const displayModalHandler = () => {
+        if (modalContainerRef.current) {
+            modalContainerRef.current.style.display = 'block';
+        }
+    }
+
+    const closeModalHandler = () => {
+        modalContainerRef.current.style.display = 'none';
+    }
+
     return (
         <div className="create-document">
             <p>Create document?</p>
-            <form onSubmit={e => onSubmitHandler(e)}>
-                <label htmlFor="newDocument">
-                    Name for new document:
-                </label>
-                <input 
-                        type="text" 
-                        placeholder="Some facts about ..."
-                        value={documentName}
-                        onChange={e => setDocumentName(e.target.value)}
-                        required
-                >
-                </input>
-                <button type="submit" className="buttons">
-                    {'  '}Create{'  '}
-                    <i className="fa-solid fa-file-circle-plus"></i>
-                </button>
-            </form>     
+            <button type="submit" className="buttons" onClick={displayModalHandler}>
+                {'  '}New{'  '}
+                <i className="fa-solid fa-file-circle-plus"></i>
+            </button>
+            <div 
+                id="modal-container"
+                ref={modalContainerRef}>
+                    <div id="modal">
+                        <div className="modal-top-info">
+                            <p className="create-info">Create a new document</p>
+                            <i  id="close-modal"
+                                onClick={closeModalHandler}
+                                className="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div className="modal-bottom-form">
+                            <form onSubmit={e => onSubmitHandler(e)}>
+                                <label htmlFor="newDocument">
+                                    Name of new document:
+                                </label>
+                                <input 
+                                        type="text" 
+                                        placeholder="Some facts about ..."
+                                        value={documentName}
+                                        onChange={e => setDocumentName(e.target.value)}
+                                        required
+                                >
+                                </input>
+                                <button type="submit" className="create-document-button">
+                                    {'  '}Create{'  '}
+                                    <i className="fa-solid fa-file-circle-plus"></i>
+                                </button>
+                            </form>     
+                        </div>
+                    </div>
+            </div>
+            
         </div>
     )
 }

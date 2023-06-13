@@ -8,7 +8,8 @@ import {
     CREATE_DOCUMENT,
     DELETE_DOCUMENT,
     UPDATE_DOCUMENT,
-    CLEAR_DOCUMENT
+    CLEAR_DOCUMENT,
+    DOCUMENT_SHARED
 } from '../actions/constant';
 
 const initialState = {
@@ -89,6 +90,12 @@ export default function documentReducer(state = initialState, action) {
                 ...state,
                 document: null,
                 documents: [],
+                loading: false
+            }
+        
+        case DOCUMENT_SHARED:
+            return {
+                ...state,
                 loading: false
             }
 
