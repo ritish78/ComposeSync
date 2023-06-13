@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 // import { getDocumentById } from '../../../actions/documents';
@@ -7,7 +7,24 @@ import formatDate from '../../../utils/formatDate';
 import { deleteDocumentById } from '../../../actions/documents';
 
 const DocumentItems = (props) => {
-    const { document, auth, deleteDocumentById } = props;    
+    const { document, auth, deleteDocumentById } = props;
+    const modalContainerRef = useRef(null);
+    
+    const displayModalHandler = () => {
+        if (modalContainerRef.current) {
+            modalContainerRef.current.style.display = 'block';
+        }
+    }
+
+    const closeModalHandler = () => {
+        modalContainerRef.current.style.display = 'none';
+    }
+
+    // window.addEventListener('click', (e) => {
+    //     if (e.target === modalContainer) {
+    //         modalContainer.style.display = 'none';
+    //     }
+    // })
 
     return (
         <div className="document-card">
@@ -36,13 +53,43 @@ const DocumentItems = (props) => {
                 <i className="fa-solid fa-share-nodes"></i>
             </Link>
                 {auth.user.name === document.author ? (
-                    // <button
-                    //     className="delete-button"
-                    //     onClick={(e) => deleteDocumentById(document._id)}
-                    // >
-                        <i  onClick={(e) => deleteDocumentById(document._id)}
+                    <>    
+                        <i  id="open-modal"
+                            onClick={displayModalHandler}
                             className="fa-solid fa-trash"></i>
-                    // </button>
+                        
+                                <div id="modal-container"
+                                    ref={modalContainerRef}>
+                                    <div id="modal">
+                                        <div className="modal-top-info">
+                                            <p>Delete document?</p>
+                                            <i  id="close-modal"
+                                                onClick={closeModalHandler}
+                                                className="fa-solid fa-circle-xmark"></i>
+                                        </div>
+                                        <div className="modal-bottom-info">
+                                            <div>
+                                                <p> Are you sure you want to delete {document.name}?</p>
+                                            </div>
+                                            <div className="modal-button-container">
+                                                <button  
+                                                        className="confirm-delete-button"
+                                                        onClick={(e) => deleteDocumentById(document._id)}>
+                                                    Delete
+                                                </button>
+                                                <button 
+                                                        className="cancel-button"
+                                                        onClick={closeModalHandler}>
+                                                    Cancel
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                    </>
+                        
                 ) : (
                     <span>
                         <i className="fa-solid fa-users"></i>
