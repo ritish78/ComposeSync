@@ -5,9 +5,9 @@ import { Navigate } from 'react-router-dom';
 import Login from '../auth/Login';
 
 const PrivateRoute = ({ component: Component, auth: { isAuthenticated, loading } }) => {
-
+    
     if (isAuthenticated) return <Component />
-
+    
     if (!isAuthenticated && loading) return <Login />
 
     return (

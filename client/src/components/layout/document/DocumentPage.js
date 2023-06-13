@@ -6,6 +6,7 @@ import { getDocumentById, updateDocumentById } from '../../../actions/documents'
 import { useParams } from 'react-router-dom';
 import DocumentEdited from './DocumentEdited';
 import TextEditor from '../texteditor/TextEditor';
+import { Helmet } from 'react-helmet';
 
 const DocumentPage = props => {
 
@@ -41,6 +42,14 @@ const DocumentPage = props => {
 
     return (
         <div className="document-page-container">
+            {
+                document && document.document ?
+                    (
+                        <Helmet>
+                            <title>{document.document.name}</title>
+                        </Helmet>
+                    ) : 'Dashboard'
+            }
             <section className="top-section">
                 {
                     document && document.document ? 

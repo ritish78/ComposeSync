@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DashboardActions from './DashboardActions';
-import DocumentHeaders from './DocumentHeaders';
 import DocumentItems from './DocumentItems';
 import DashboardTop from './DashboardTop';
 import { getAllDocumentsOfCurrentUser  } from '../../../actions/documents';
 import Spinner from '../Spinner';
 import DocumentEmpty from './DocumentEmpty';
+import { Helmet } from 'react-helmet';
 
 const Dashboard = (props) => {
     const { getAllDocumentsOfCurrentUser, auth, document: { documents, loading } } = props;
@@ -16,15 +16,14 @@ const Dashboard = (props) => {
         getAllDocumentsOfCurrentUser();
     }, [getAllDocumentsOfCurrentUser]);
 
-    // const documentTest = {
-    //     'name': 'Facts about water',
-    //     'user': 'Admin',
-    //     'date': '5/06/2023'
-    // }
+
     if (!auth.user) return;
     
     return (
         <div className="container">
+        <Helmet>
+            <title>Dashboard</title>
+        </Helmet>
         <DashboardTop />
         <section className="documents-info">
             <DashboardActions />

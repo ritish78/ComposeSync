@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { registerUser } from '../../actions/auth';
 import { setAlert } from '../../actions/alert';
 import { toast } from 'react-toastify';
+import { Helmet } from 'react-helmet';
 
 const Register = props => {
 
@@ -47,8 +48,11 @@ const Register = props => {
 
     return (
         <div className="login-body">
+            <Helmet>
+                <title>Sign Up - ComposeSync</title>
+            </Helmet>
             <section className="login-container">
-                <h1 className="large text-primary">Sign Up</h1>
+                <h1 className="large text-primary">ComposeSync</h1>
                 <p className="lead"><i className="fa-solid fa-user-plus"></i> Create Your Account</p>
                 <form className="form" onSubmit={e => handleSubmit(e)}>
                     <div className="form-group">

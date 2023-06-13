@@ -39,6 +39,8 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+        </Routes>
+        <Routes>
           <Route 
               path='/dashboard'
               element={<PrivateRoute component={Dashboard} />}

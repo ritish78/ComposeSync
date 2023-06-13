@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import { loginUser } from '../../actions/auth';
+import { Helmet } from 'react-helmet';
 
 const Login = props => {
 
@@ -32,8 +33,11 @@ const Login = props => {
 
     return (
         <div className='login-body'>
+            <Helmet>
+                <title>Sign In - ComposeSync</title>
+            </Helmet>
             <section className="login-container">
-                <h1 className="large text-primary">Sign In</h1>
+                <h1 className="large text-primary">ComposeSync</h1>
                 <p className="lead"><i className="fas fa-user"></i> Sign into Your Account</p>
                 <form className="form" onSubmit={handleSubmit}>
                     <div className="form-group">
