@@ -1,7 +1,7 @@
 const ROLES = {
     ADMIN: 'admin',
     SUPERADMIN: 'superadmin',
-    USER: 'user',
+    COLLABORATOR: 'collaborator',
     VIEWER: 'viewer',
     AUTHOR: 'author'
 };

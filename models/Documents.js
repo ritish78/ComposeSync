@@ -35,6 +35,14 @@ const DocumentSchema = mongoose.Schema({
             user: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'user'
+            },
+            role: {
+                type: String,
+                default: 'collaborator'
+            },
+            date: {
+                type: Date,
+                default: Date.now
             }
         }
     ],

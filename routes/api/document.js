@@ -8,7 +8,12 @@ const router = express.Router();
 const User = require('../../models/Users');
 const Document = require('../../models/Documents');
 
-const DOCUMENTS_PER_PAGE = 6;
+const { DOCUMENTS_PER_PAGE } = require('../../config/constants');
+const {
+    canViewDocument,
+    canDeleteDocument,
+    canEditDocument
+} = require('../../permissions/DocumentPermissions');
 
 
 // @route       POST api/documents
@@ -277,12 +282,7 @@ router.get('/mine/all', auth, async (req, res) => {
 // @access      Admin
 router.get('/users/all', auth, authRole(ROLES.ADMIN), async (req, res) => {
     try {
-        const currentUser = await User.findById(req.user.id);
-
-        // if (!currentUser.isAdmin) {
-        //     return res.status(403).json({ message: 'User is not authorized!' });
-        // }
-
+        
         const page = req.query.page ? parseInt(req.query.page) : 1;
         const limit = req.query.limit ? parseInt(req.query.limit) : DOCUMENTS_PER_PAGE;
 
@@ -353,6 +353,55 @@ router.get('/mine/select', auth, async (req, res) => {
     } catch (error) {
         console.error(error.message);
         res.status(500).send({ message: 'Error while retrieving documents of current user!' })
+    }
+})
+
+
+// @route       POST api/documents/share/:documentId/:userEmail
+// @desc        Share a document with another user by another user's email
+// @access      Private
+router.post('/share/:documentId/:userEmail', auth, async (req, res) => {
+    try {
+        const documentId = req.params.documentId;
+        const userEmail = req.params.userEmail;
+
+        const document = await Document.findById(documentId);
+
+        //Checking if the document that user wants to share belongs with current user.
+        if (document && document.user != req.user.id) {
+            return res.status(401).send({ message: 'User is not authorized to share!' });
+        } else if (!document) {
+            return res.status(404).send({ message: 'Document does not exists!' });
+        }
+
+     
+        const sharedToUser = await User.findOne({ email: userEmail });
+        // if (sharedToUser && sharedToUser.email != userEmail)
+        if (!sharedToUser) {
+            return res.status(404).send({ message: 'Receipient user does not exists!' });
+        }
+
+        //Now checking if we have already shared the document with the user.
+        if (document.sharedWith.length > 0) {
+            const indexOfUser = document.sharedWith.findIndex(userInfo => userInfo.user.toString() === sharedToUser._id.toString());
+            if (indexOfUser != -1) {
+                return res.status(409).send({ message: 'User aleady has access to the document!' });
+            }
+        }
+
+        document.sharedWith.push({
+            user: sharedToUser._id
+        });
+        sharedToUser.documents.unshift(document._id);
+
+        await document.save();
+        await sharedToUser.save();
+
+        return res.status(200).send({ message: `${userEmail} is now able to access the document.` })
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send({ message: 'Could not share the document with another user!' });
     }
 })
 

@@ -91,9 +91,10 @@ const DocumentItems = (props) => {
                     </>
                         
                 ) : (
-                    <span>
-                        <i className="fa-solid fa-users"></i>
-                    </span>
+                    ''
+                    // <span>
+                    //     <i className="fa-solid fa-users"></i>
+                    // </span>
                 )}
             </div>
         </div>
