@@ -44,6 +44,15 @@ npm install
 * There are Rest APIs available. Will add a few later.
 * Or, you can visit the `localhost:3000` which will redirect you to `login` page.
 
+# API Rate Limiting:
+* In this project, Redis is used as rate limiter.
+* In the case of user who is not signed in, the `MAX_REQ_ALLOWED_OF_NOT_SIGNEDIN_PER_MINUTE` is 60 requests.
+* In the case of user is logged in and has a valid `JWT` token, the `MAX_REQ_ALLOWED_OF_AUTH_USER_PER_MINUTE` is 100 requests. 
+* Whether the user is logged in or not, the API access window for rate limiter to reset itself (`WINDOW_SIZE_IN_SECONDS`) is 60 seconds.
+* * User's IP address and User ID itself is stored as `key` in Redis. If user is not signed in, their's IP is stored as key, and User ID is stored as key if they are signed in.
+
+![ComposeSync Redis rate limiter excalidraw](https://github.com/ritish78/ComposeSync/assets/36816476/27fd2e77-bd27-4161-9267-18e6740af7c6)
+
 # Screenshot:
 * Login Page: <br>![Login Page SS](https://github.com/ritish78/ComposeSync/assets/36816476/dcdc0861-37f1-4a53-858a-3a3ae5021bed)
 * Dashboard: <br>![Dashboard SS](https://github.com/ritish78/ComposeSync/assets/36816476/4938ba5f-e49e-4017-8acd-89c3307448cd)
