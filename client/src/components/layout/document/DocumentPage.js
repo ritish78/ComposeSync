@@ -51,7 +51,7 @@ const DocumentPage = props => {
                 <div className="editor-container" id="text-editor">
                     {
                         document && document.document && 
-                            <TextEditor data={document.document.data} documentId={documentId} setTextEditorData={setTextEditorData}/>
+                            <TextEditor documentName={document.document.name} data={document.document.data} documentId={documentId} setTextEditorData={setTextEditorData} />
                     }
                 </div>
                 <div id="last-edited-container" className="last-edited-hidden">

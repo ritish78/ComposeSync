@@ -7,10 +7,12 @@ import { DOCUMENT_SAVE_INTERVAL_MS } from '../../../actions/constant';
 import { updateDocumentById } from '../../../actions/documents';
 import { connect } from 'react-redux';
 import  { io } from 'socket.io-client';
+import { saveAs } from 'file-saver';
+import { pdfExporter } from 'quill-to-pdf';
 
 const TextEditor = props => {
 
-    const { data, documentId, updateDocumentById, setTextEditorData } = props;
+    const { data, documentId, updateDocumentById, setTextEditorData, documentName } = props;
     const [quill, setQuill] = useState();
     const [socket, setSocket] = useState();
 
@@ -137,10 +139,21 @@ const TextEditor = props => {
             });
     }
 
+    const exportDocumentAsPDF = async () => {
+        const documentContents = quill.getContents();
+
+        const pdfAsBlob = await pdfExporter.generatePdf(documentContents);
+
+        saveAs(pdfAsBlob, documentName);
+    }
+
     return (
         <div id="quill-container">
             <button id="save-document" onClick={saveDocumentUsingButton}>
                 Save
+            </button>
+            <button id="export-document-pdf" onClick={exportDocumentAsPDF}>
+                Export as PDF
             </button>
             <div id="text" ref={wrapperRef}></div>
         </div>
@@ -149,6 +162,7 @@ const TextEditor = props => {
 
 TextEditor.propTypes = {
     data: PropTypes.object,
+    documentName: PropTypes.string.isRequired,
     updateDocumentById: PropTypes.func.isRequired
 }
 
