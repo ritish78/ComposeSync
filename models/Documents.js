@@ -46,10 +46,16 @@ const DocumentSchema = mongoose.Schema({
             }
         }
     ],
+    expiresAt: {
+        type: Date,
+        expires: 0,
+        default: Date.now
+    },
     date: {
         type: Date,
         default: Date.now
     }
 });
+
 
 module.exports = Document = mongoose.model('documents', DocumentSchema);

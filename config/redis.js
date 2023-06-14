@@ -3,7 +3,7 @@ dotenv.config();
 const redis = require('redis');
 dotenv.config();
 
-const redisUrl = process.env.RAILWAY_REDIS_URL;
+const redisUrl = process.env.UPSTASH_REDIS_URL;
 
 
 const redisClient = redis.createClient({

@@ -12,7 +12,8 @@ const { DOCUMENTS_PER_PAGE } = require('../../config/constants');
 const {
     canViewDocument,
     canDeleteDocument,
-    canEditDocument
+    canEditDocument,
+    canShareDocument
 } = require('../../permissions/DocumentPermissions');
 
 
@@ -23,14 +24,23 @@ router.post('/', auth, async (req, res) => {
     try {
         // console.log(req.body.name, req.body.data, req.user.id)
         const user = await User.findById(req.user.id).select('-password');
+        console.log(user);
 
+        if (!user) {
+            return res.status(404).send({ message: 'User does not exists to create new document!' });
+        }
+
+        console.log(req.body);
+        console.log(req.body.name);
+        console.log(req.body.expiresAt);
 
         const newDocument = new Document({
             name: req.body.name,
             author: user.name,
             // data: req.body.data,
             data: '',
-            user: req.user.id
+            user: req.user.id,
+            expiresAt: req.body.expiresAt
         });
 
         
@@ -89,22 +99,17 @@ router.get('/:documentId', auth, async (req, res) => {
             return res.status(404).json({ message: 'Document does not exists!' })
         }
 
-        //Now checking if the document belongs to the current user
-        if (req.user.id == document.user) {
+        const user = await User.findById(req.user.id);
+        const isUserAllowedToView = await canViewDocument(user, document);
+
+        console.log({ isUserAllowedToView });
+
+    
+        if (isUserAllowedToView) {
             return res.json(document);
         } else {
-            return res.status(401).json({ message: 'The user is not authorized to view this document!' });
+            return res.status(403).json({ message: 'The user is not authorized to view this document!' });
         }
-
-        /**
-        TODO:
-            Currently we are only checking the 'user' field in document which
-            corresponds to the author of the document. If the current user is
-            also the author of the document, then we are allowing them to view
-            the document. However, we will need to implement another method which
-            will check if the 'sharedWith' array also contains the user id of the
-            current user. If so, we will allow them to view the document.
-         */
 
     } catch (error) {
         console.error(error.message);
@@ -127,15 +132,15 @@ router.delete('/:documentId', auth, async (req, res) => {
             return res.status(404).json({ message: 'Document does not exists!' })
         }
         
-        //Now we check if the current user is the the author of the document
-        //If so, then only we will allow for deleting the document.
-        if (req.user.id !== document.user.toString()) {
-            return res.status(401).json({ message: 'User is not authorized to delete this document!' })
+        const user = await User.findById(req.user.id).select('-password');
+        const isUserAllowedToDeleteDocument = await canDeleteDocument(user, document);
+
+        if (!isUserAllowedToDeleteDocument) {
+            return res.status(403).json({ message: 'User is not authorized to delete this document!' })
         }
 
         //User object also have record of user's documents in documents[] array.
         //The array contains the document id's the user has created.
-        const user = await User.findById(req.user.id).select('-password');
         const indexToDelete = user.documents.findIndex(document => document._id.toString() === req.params.documentId);
         if (indexToDelete !== -1) {
             user.documents.splice(indexToDelete, 1);
@@ -145,6 +150,7 @@ router.delete('/:documentId', auth, async (req, res) => {
 
         //Finally, after checking if the document exists and then checking if the
         //current user is the author of the document, we can delete the document
+        //Admin are also allowed to delete document
         await Document.findByIdAndDelete(req.params.documentId);
 
         res.json({ message: 'Document deleted!' });
@@ -173,8 +179,12 @@ router.post('/:documentId', auth, async (req, res) => {
 
         //Now we check if the current user is the the author of the document
         //If so, then only we will allow for updating the document.
-        if (req.user.id !== document.user.toString()) {
-            return res.status(401).json({ message: 'User is not authorized to update this document!' })
+        const user = await User.findById(req.user.id);
+
+        const isUserAllowedToUpdateDocument = await canEditDocument(user, document);
+
+        if (!isUserAllowedToUpdateDocument) {
+            return res.status(403).json({ message: 'User is not authorized to update this document!' })
         }
 
         //Getting the values from request body
@@ -227,10 +237,13 @@ router.get('/name/:documentId', auth, async (req, res) => {
 
         //Now we check if the current user is the the author of the document
         //If so, then only we will allow for viewing the document.
-        if (req.user.id == document.user) {
+        const user = await User.findById(req.user.id);
+        const isUserAllowedToViewDocument = await canViewDocument(user, document);
+
+        if (isUserAllowedToViewDocument) {
             return res.status(200).json({ name: document.name })
         } else {
-            return res.status(401).json({ message: 'User is not authorized to retrieve this document!' })
+            return res.status(403).json({ message: 'User is not authorized to retrieve this document!' })
         }
 
     } catch (error) {
@@ -264,7 +277,17 @@ router.get('/mine/all', auth, async (req, res) => {
             if (documentInfo !== null) {
                 documents.push(documentInfo);
             } 
+            // else {
+            //     //Removing the document id in User object if the document Id
+            //     //does not correspond to any document. Done to remove document
+            //     //Id which has been deleted by TTL(expiresAt) 
+            //     documentIds.splice(i, 1);
+            //     i--;
+            // }
         }
+
+        // user.documents = documentIds;
+        // await user.save();
 
         res.json(documents);
 
@@ -289,8 +312,13 @@ router.get('/users/all', auth, authRole(ROLES.ADMIN), async (req, res) => {
         const numberOfDocumentsToSkip = (page - 1) * limit;
 
         let documents = await Document.find().skip(numberOfDocumentsToSkip).limit(limit);
+        let documentsCount = await Document.count();
 
-        res.json(documents);
+        const lastPage = Math.ceil(documentsCount / limit);
+        const hasNextPage = page < lastPage;
+        const hasPreviousPage = page > 1 && page <= lastPage;
+        
+        res.json({ hasNextPage, hasPreviousPage, lastPage, documentsCount, documents });
     } catch (error) {
         console.error(error.message);
         res.status(500).send({ message: 'Error while retrieving all documents!' })
@@ -299,7 +327,7 @@ router.get('/users/all', auth, authRole(ROLES.ADMIN), async (req, res) => {
 
 
 
-// @route       GET api/documents/mine/select?page=:pageNumbner&limit=:limit
+// @route       GET api/documents/mine/select?page=:pageNumber&limit=:limit
 // @desc        Get specified number of documents of a user
 // @access      Private
 router.get('/mine/select', auth, async (req, res) => {
@@ -364,16 +392,16 @@ router.post('/share/:documentId/:userEmail', auth, async (req, res) => {
     try {
         const documentId = req.params.documentId;
         const userEmail = req.params.userEmail;
+        const { role } = req.body;
 
         const document = await Document.findById(documentId);
+        const currentUser = await User.findById(req.user.id);
+       
+        const isUserAllowedToShareDocument = await canShareDocument(currentUser, document);
 
-        //Checking if the document that user wants to share belongs with current user.
-        if (document && document.user != req.user.id) {
-            return res.status(401).send({ message: 'User is not authorized to share!' });
-        } else if (!document) {
-            return res.status(404).send({ message: 'Document does not exists!' });
+        if (!isUserAllowedToShareDocument) {
+            return res.status(403).send({ message: 'User is not allowed to share document! Contact author of document for it.' });
         }
-
      
         const sharedToUser = await User.findOne({ email: userEmail });
         // if (sharedToUser && sharedToUser.email != userEmail)
@@ -390,7 +418,8 @@ router.post('/share/:documentId/:userEmail', auth, async (req, res) => {
         }
 
         document.sharedWith.push({
-            user: sharedToUser._id
+            user: sharedToUser._id,
+            role
         });
         sharedToUser.documents.unshift(document._id);
 

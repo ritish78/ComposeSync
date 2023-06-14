@@ -1,56 +1,70 @@
 const ROLE = require('../models/Roles');
-const User = require('../models/Users');
 
-async function canViewDocument(currentUserId, documentUserId) {
-    try {
-        const user = await User.findById(currentUserId);
-        return (
-            user.isAdmin ||
-            user.role === ROLE.SUPERADMIN ||
-            user.role === ROLE.ADMIN ||
-            user.role === ROLE.VIEWER ||
-            user.role === ROLE.AUTHOR ||
-            user.role === ROLE.COLLABORATOR ||
-            currentUserId === documentUserId 
-        )
-    } catch (error) {
-        res.status(403).json({ message: 'User is not authorized!' });
-    }
+function getUserRole(document, user) {
+
+    if (user.isAdmin) return ROLE.ADMIN;
+    if (document.user.toString() === user._id.toString()) return ROLE.AUTHOR;
+
+    if (document.sharedWith.length === 0) return null;
+
+    const indexOfSharedUser = document.sharedWith.findIndex(sharedUser => sharedUser.user.toString() === user._id.toString());
+    
+    if (indexOfSharedUser === -1) return null;
+
+    return document.sharedWith[indexOfSharedUser].role;
 }
 
-async function canDeleteDocument(currentUserId, documentUserId) {
-    try {
-        const user = await User.findById(currentUserId);
-        return (
-            user.isAdmin ||
-            user.role === ROLE.SUPERADMIN ||
-            user.role === ROLE.ADMIN ||
-            user.role === ROLE.AUTHOR ||
-            currentUserId === documentUserId
-        )
-    } catch (error) {
-        res.status(403).json({ message: 'User is not authorized!' });
-    }
+
+async function canViewDocument(user, document) {
+    const userRole = getUserRole(document, user);
+
+    return (
+        user.isAdmin ||
+        userRole === ROLE.SUPERADMIN ||
+        userRole === ROLE.ADMIN ||
+        userRole === ROLE.VIEWER ||
+        userRole === ROLE.AUTHOR ||
+        userRole === ROLE.COLLABORATOR
+    )
 }
 
-async function canEditDocument(currentUserId, documentUserId) {
-    try {
-        const user = await User.findById(currentUserId);
-        return (
-            user.isAdmin ||
-            user.role === ROLE.SUPERADMIN ||
-            user.role === ROLE.ADMIN ||
-            user.role === ROLE.COLLABORATOR ||
-            user.role === ROLE.AUTHOR ||
-            currentUserId === documentUserId
-        )
-    } catch (error) {
-        res.status(403).json({ message: 'User is not authorized!' });
-    }
+async function canDeleteDocument(user, document) {
+    const userRole = getUserRole(document, user);
+
+    return (
+        user.isAdmin ||
+        userRole === ROLE.SUPERADMIN ||
+        userRole === ROLE.ADMIN ||
+        userRole === ROLE.AUTHOR
+    )
+}
+
+async function canEditDocument(user, document) {
+    const userRole = getUserRole(document, user);
+
+    return (
+        user.isAdmin ||
+        userRole === ROLE.SUPERADMIN ||
+        userRole === ROLE.ADMIN ||
+        userRole === ROLE.COLLABORATOR ||
+        userRole === ROLE.AUTHOR
+    )
+}
+
+async function canShareDocument(user, document) {
+   
+    const userRole = getUserRole(document, user);
+
+    return (
+        userRole === ROLE.SUPERADMIN,
+        userRole === ROLE.ADMIN,
+        userRole === ROLE.AUTHOR
+    )
 }
 
 module.exports = {
     canViewDocument,
     canDeleteDocument,
-    canEditDocument
+    canEditDocument,
+    canShareDocument
 }
