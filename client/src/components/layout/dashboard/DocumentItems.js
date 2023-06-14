@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-// import { getDocumentById } from '../../../actions/documents';
 import { connect } from 'react-redux';
 import formatDate from '../../../utils/formatDate';
 import { deleteDocumentById, shareDocumentByEmail } from '../../../actions/documents';
+import ROLES from '../../../actions/userRoles';
+import { toast } from 'react-toastify'; 
 
 const DocumentItems = (props) => {
     const { document, auth, deleteDocumentById, shareDocumentByEmail } = props;
     const [sharedWithEmail, setSharedWithEmail] = useState('');
+    const [userRole, setUserRole] = useState('');
     const shareModalContainerRef = useRef(null);
     const deleteModalContainerRef = useRef(null);
     
@@ -22,12 +24,25 @@ const DocumentItems = (props) => {
         modalRef.current.style.display = 'none';
     }
 
+    const optionsChangeHandler = e => {
+        const selectedRole = e.target.value;
+
+        if (selectedRole !== '') {
+            setUserRole(selectedRole);
+        }
+    }
+
     const onSubmitHandler = e => {
         e.preventDefault();
 
+        if (userRole === '') {
+            toast.error('Please provide appropriate permission to user!');
+            return;
+        }
         shareDocumentByEmail({
             documentId: document._id,
-            email: sharedWithEmail
+            email: sharedWithEmail,
+            role: userRole
         }).then(closeModalHandler(shareModalContainerRef));
         setSharedWithEmail('');
     }
@@ -50,7 +65,8 @@ const DocumentItems = (props) => {
                      not have document.data in it. Substituting it with different text if document empty
                 */}
                 {/* {document.data ? document.data : 'Write on the document for few lines from the document to appear here.'} */}
-                <small>{document.data ? '': '(Empty Document)'}</small>
+                <small>{document.data ? '': '(Empty Document)'}</small><br />
+                <small>{document.sharedWith && document.sharedWith.length === 0 ?  '' : (`Shared With: ${document.sharedWith.length} other user(s)`)}</small>
             </div>
             <div className="document-options">
             <Link to={`/document/${document._id}`}>
@@ -84,6 +100,18 @@ const DocumentItems = (props) => {
                                         required
                                 >
                                 </input>
+                                <label htmlFor="user-permissions">
+                                    Assign permission to shared user:
+                                </label>
+                                <select
+                                        id="user-permissions"
+                                        value={userRole}
+                                        onChange={optionsChangeHandler}
+                                >
+                                    <option value="">Assign permission</option>
+                                    <option value={ROLES.COLLABORATOR}>View and Edit</option>
+                                    <option value={ROLES.VIEWER}>View</option>
+                                </select>
                                 <button type="submit" className="create-document-button">
                                     {'  '}Share{'  '}
                                     <i className="fa-solid fa-share-nodes"></i>

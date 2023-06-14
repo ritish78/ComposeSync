@@ -223,11 +223,18 @@ export const updateDocumentById = (documentId, data) => async (dispatch) => {
     }
 }
 
-export const shareDocumentByEmail = ({ documentId, email }) => async (dispatch) => {
+export const shareDocumentByEmail = ({ documentId, email, role }) => async (dispatch) => {
     try {
-        await axios.post(`/api/documents/share/${documentId}/${email}`, null);
-
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        
         console.log('Shared Document with: ', email);
+        console.log('Role assigned: ', role);
+
+        await axios.post(`/api/documents/share/${documentId}/${email}`, JSON.stringify({ role }), config);
 
         dispatch({
             type: DOCUMENT_SHARED,

@@ -17,7 +17,7 @@ const Register = props => {
         confirmPassword: ''
     })
 
-    const { setAlert, registerUser, isAuthenticated } = props;
+    const { registerUser, isAuthenticated } = props;
 
     const { name, email, avatar, password, confirmPassword } = formData;
 
@@ -78,7 +78,7 @@ const Register = props => {
                     <div className="form-group">
                         <input 
                                 type="text" 
-                                placeholder="Avatar Url" 
+                                placeholder="Avatar Url (optional)" 
                                 name="avatar"
                                 value={avatar}
                                 onChange={e => onChange(e)}
