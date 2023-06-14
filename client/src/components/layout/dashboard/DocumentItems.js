@@ -108,7 +108,7 @@ const DocumentItems = (props) => {
                                         value={userRole}
                                         onChange={optionsChangeHandler}
                                 >
-                                    <option value="">Assign permission</option>
+                                    <option value="">--Assign permission--</option>
                                     <option value={ROLES.COLLABORATOR}>View and Edit</option>
                                     <option value={ROLES.VIEWER}>View</option>
                                 </select>

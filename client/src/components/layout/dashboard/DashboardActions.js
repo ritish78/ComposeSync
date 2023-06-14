@@ -7,6 +7,8 @@ import { createDocument } from '../../../actions/documents';
 const DashboardActions = (props) => {
 
     const [documentName, setDocumentName] = useState('');
+    const [expiryDate, setExpiryDate] = useState('');
+    const [expires, setExpires] = useState(false);
     const modalContainerRef = useRef(null);
 
     const { createDocument } = props;
@@ -17,12 +19,21 @@ const DashboardActions = (props) => {
 
         //We are creating a document and we receive the document back
         //Then we navigate to /document/:documentId of the created document
-        createDocument({ name: documentName })
-            .then(document => navigate(`/document/${document._id}`));
+        createDocument(
+            { 
+                name: documentName,
+                expiresAt: expiryDate
+            }).then(document => navigate(`/document/${document._id}`));
 
         //Clearing the name of document form
         setDocumentName('');
     }
+
+    const expiryCheckboxHandler = e => {
+        setExpires(e.target.checked);
+    }
+
+
 
     const displayModalHandler = () => {
         if (modalContainerRef.current) {
@@ -44,7 +55,7 @@ const DashboardActions = (props) => {
             <div 
                 id="modal-container"
                 ref={modalContainerRef}>
-                    <div id="modal">
+                    <div id="modal-create-doc">
                         <div className="modal-top-info">
                             <p className="create-info">Create a new document</p>
                             <i  id="close-modal"
@@ -64,6 +75,34 @@ const DashboardActions = (props) => {
                                         required
                                 >
                                 </input>
+                                <div className='same-line'>
+                                    <label>
+                                        Expires?
+                                    </label>
+                                    <input
+                                            id="has-expiry"
+                                            value={expires}
+                                            type="checkbox"
+                                            onChange={e => expiryCheckboxHandler(e)}
+                                    ></input>
+                                </div>
+                                {
+                                    expires && (
+                                        <>
+                                            <label htmlFor="expiry-date">
+                                                Expires At:
+                                            </label>
+                                            <input
+                                                    type="date"
+                                                    value={expiryDate}
+                                                    onChange={e => {
+                                                        console.log(e.target.value);
+                                                        setExpiryDate(e.target.value)}}
+                                            ></input>
+                                        </>
+                                    )
+                                }
+                                
                                 <button type="submit" className="create-document-button">
                                     {'  '}Create{'  '}
                                     <i className="fa-solid fa-file-circle-plus"></i>

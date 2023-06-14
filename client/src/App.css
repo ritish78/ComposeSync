@@ -225,7 +225,8 @@ input:focus {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-#modal {
+#modal,
+#modal-create-doc {
     background-color: #ffffff;
     position: absolute;
     top: 50%;
@@ -241,6 +242,10 @@ input:focus {
 
     animation-name: animatemodal;
     animation-duration: .4s;
+}
+
+#modal-create-doc {
+    height: 400px;
 }
 
 .modal-top-info {
@@ -353,6 +358,34 @@ label {
     background-color: var(--secondary-color);
     color: #ffffff;
 }
+
+.same-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+input[type="checkbox"] {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+}
+
+#user-permissions {
+    width: 60%;
+    padding: 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#user-permissions:focus {
+    outline: 2px solid var(--secondary-color);
+}
+
   
   
 

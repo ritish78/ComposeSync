@@ -108,7 +108,7 @@ export const getDocumentById = (documentId) => async (dispatch) => {
 }
 
 
-export const createDocument = (nameOfDocument) => async (dispatch) => {
+export const createDocument = (documentInfo) => async (dispatch) => {
     try {
         const resolveAfterTwoSeconds = new Promise(resolve => setTimeout(resolve, 2000));
         toast.promise(
@@ -128,7 +128,7 @@ export const createDocument = (nameOfDocument) => async (dispatch) => {
 
         //Artificial Delay of two seconds before finally creating the document
         await resolveAfterTwoSeconds;
-        const res = await axios.post('/api/documents', nameOfDocument, config);
+        const res = await axios.post('/api/documents', documentInfo, config);
 
         // const newDocument = res.data;
         dispatch({
