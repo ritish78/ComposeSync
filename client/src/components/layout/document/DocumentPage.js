@@ -7,12 +7,29 @@ import { useParams } from 'react-router-dom';
 import DocumentEdited from './DocumentEdited';
 import TextEditor from '../texteditor/TextEditor';
 import { Helmet } from 'react-helmet';
+import { io } from 'socket.io-client';
 
 const DocumentPage = props => {
 
     const [textEditorData, setTextEditorData] = useState();
     const { auth, document, getDocumentById } = props;
     const { documentId } = useParams();
+
+    const [socket, setSocket] = useState();
+
+    useEffect(() => {
+        const socket = io('http://localhost:5000');
+        setSocket(socket);
+
+        socket.emit('user-joined', { 
+            username: auth.user.name,
+            documentId
+        });
+    
+        return () => {
+            socket.disconnect()
+        }
+    }, [])
 
     useEffect(() => {
         getDocumentById(documentId)
@@ -53,14 +70,14 @@ const DocumentPage = props => {
             <section className="top-section">
                 {
                     document && document.document ? 
-                            <DocumentTop documentName={document.document.name} handleSaveFromButton={handleSaveFromButton} textEditorData={textEditorData}/> : ''
+                            <DocumentTop documentName={document.document.name} handleSaveFromButton={handleSaveFromButton} textEditorData={textEditorData} /> : ''
                 }
             </section>
             <section id="bottom-container" className="bottom-section-hidden">
                 <div className="editor-container" id="text-editor">
                     {
                         document && document.document && 
-                            <TextEditor documentName={document.document.name} data={document.document.data} documentId={documentId} setTextEditorData={setTextEditorData} />
+                            <TextEditor documentName={document.document.name} data={document.document.data} documentId={documentId} setTextEditorData={setTextEditorData} socket={socket}/>
                     }
                 </div>
                 <div id="last-edited-container" className="last-edited-hidden">

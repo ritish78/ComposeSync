@@ -6,24 +6,14 @@ import { TOOLBAR_OPTIONS } from './ToolbarOptions';
 import { DOCUMENT_SAVE_INTERVAL_MS } from '../../../actions/constant';
 import { updateDocumentById } from '../../../actions/documents';
 import { connect } from 'react-redux';
-import  { io } from 'socket.io-client';
 import { saveAs } from 'file-saver';
 import { pdfExporter } from 'quill-to-pdf';
 
 const TextEditor = props => {
 
-    const { data, documentId, updateDocumentById, setTextEditorData, documentName } = props;
+    const { data, documentId, updateDocumentById, setTextEditorData, documentName, socket } = props;
     const [quill, setQuill] = useState();
-    const [socket, setSocket] = useState();
-
-    useEffect(() => {
-        const socket = io('http://localhost:5000');
-        setSocket(socket);
     
-        return () => {
-            socket.disconnect()
-        }
-    }, [])
 
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return;
@@ -149,12 +139,20 @@ const TextEditor = props => {
 
     return (
         <div id="quill-container">
-            <button id="save-document" onClick={saveDocumentUsingButton}>
-                Save
-            </button>
-            <button id="export-document-pdf" onClick={exportDocumentAsPDF}>
-                Export as PDF
-            </button>
+            <div className="buttons-container">
+                <button 
+                    id="save-document"
+                    onClick={saveDocumentUsingButton}
+                >
+                    Save <i className="fa-solid fa-floppy-disk"></i>
+                </button>
+                <button 
+                    id="export-document-pdf" 
+                    onClick={exportDocumentAsPDF}
+                >
+                    Export as PDF <i className="fa-solid fa-file-pdf"></i>
+                </button>
+            </div>
             <div id="text" ref={wrapperRef}></div>
         </div>
     )

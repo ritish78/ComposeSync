@@ -445,12 +445,12 @@ input[type="checkbox"] {
     font-size: 24px;
 }
 
-.username-section button {
+.username-section button, #save-document, #export-document-pdf {
     font-size: 1.1rem;
     border-radius: 7px;
 }
 
-.username-section button:hover {
+.username-section button:hover, #save-document, #export-document-pdf {
     box-shadow: 2px 2px var(--secondary-color);
 }
 
@@ -619,6 +619,29 @@ input[type="checkbox"] {
     background-color: lightblue;
 }
 
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    background-color: var(--primary-color);
+}
+
+.buttons-container > button {
+    margin: -50px 30px 3px 30px;
+    font-family: var(--rale-font);
+    padding: 10px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.buttons-container button:active {
+    transform: translateY(1px);
+}
+
+.buttons-container button:hover {
+    text-shadow: 0.5px 0.5px var(--secondary-color);
+}
+
 
 /* For Text Editor */
 .editor-container {
@@ -756,5 +779,9 @@ input[type="checkbox"] {
 
     .create-document {
         margin-top: 10px;
+    }
+
+    .buttons-container > button {
+        margin: -50px 20px 3px 40px;
     }
 }
