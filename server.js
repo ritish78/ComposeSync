@@ -5,10 +5,10 @@ const { Server } = require('socket.io');
 const http = require('http');
 const cors = require('cors');
 dotenv.config();
+const path = require('path');
 
 const rateLimiter = require('./middleware/rate-limiter');
-const connectRedis = require('./config/redis'); 
-
+const { redisClient } = require('./config/redis');
 const app = express();
 const httpServer = http.createServer(app);
 
@@ -39,6 +39,7 @@ const io = new Server(httpServer,
 
 io.on('connection', socket => {
     console.log('CONNECTED!');
+
     socket.on('get-document', documentInfo => {
         socket.join(documentInfo.documentId);
         socket.emit('load-document', documentInfo.data);
@@ -48,8 +49,13 @@ io.on('connection', socket => {
     })
 
     socket.on('save-document', documentInfo => {
-        socket.broadcast.to(documentInfo.documentId).emit('save-document', documentInfo.data);
+        socket.broadcast.to(documentInfo.documentId).emit('save-document', documentInfo.data);  
     })
+
+    // socket.on('user-joined', ({ username, documentId }) => {
+    //     redisClient.sAdd(documentId, username);
+    // })
+
 })
 
 
@@ -58,5 +64,16 @@ app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/documents', require('./routes/api/document'));
 app.use('/api/profile', require('./routes/api/profile'));
+
+
+//Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+    //Set static folder
+    app.use(express.static('client/build'));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 
 httpServer.listen(EXPRESS_SERVER_PORT, () => console.log('Server listening on port', EXPRESS_SERVER_PORT));
