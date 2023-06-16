@@ -18,6 +18,7 @@ import {
 import Dashboard from './components/layout/dashboard/Dashboard';
 import PrivateRoute from './components/routing/PrivateRoute';
 import DocumentPage from './components/layout/document/DocumentPage';
+import NotFound from './components/routing/NotFound';
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -49,6 +50,7 @@ function App() {
               path='/document/:documentId'
               element={<PrivateRoute component={DocumentPage} />}
           />    
+          <Route path='/*' element={<NotFound />} />
         </Routes>
       </Router>
     </Provider>

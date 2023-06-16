@@ -1,5 +1,5 @@
 const express = require('express');
-const connectToMongoDB = require('./config/db');
+const { connectMongo : connectToMongoDB } = require('./config/db');
 const dotenv = require('dotenv');
 const { Server } = require('socket.io');
 const http = require('http');
@@ -23,7 +23,7 @@ app.use(rateLimiter);
 const EXPRESS_SERVER_PORT = process.env.EXPRESS_SERVER_PORT;
 
 app.get('/', (req, res) => {
-    res.send({ message: 'API Woking fine' });
+    res.send({ message: 'API Working fine' });
 })
 
 
@@ -67,13 +67,21 @@ app.use('/api/profile', require('./routes/api/profile'));
 
 
 //Serve static assets in production
-if (process.env.NODE_ENV === 'production') {
-    //Set static folder
-    app.use(express.static('client/build'));
+// if (process.env.NODE_ENV === 'production') {
+//     //Set static folder
+//     app.use(express.static('client/build'));
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
-    })
-}
+//     app.get('*', (req, res) => {
+//         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+//     })
+// }
 
-httpServer.listen(EXPRESS_SERVER_PORT, () => console.log('Server listening on port', EXPRESS_SERVER_PORT));
+httpServer.listen(EXPRESS_SERVER_PORT, () => {
+    console.log('Server listening on port', EXPRESS_SERVER_PORT);
+    app.emit('server-started');
+});
+
+
+app.on('close', () => httpServer.close());
+
+module.exports = app;

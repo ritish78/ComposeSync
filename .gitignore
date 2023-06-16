@@ -1,3 +1,5 @@
 .env
 production.env
 node_modules
+__test__
+test

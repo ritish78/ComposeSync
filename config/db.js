@@ -4,9 +4,10 @@ dotenv.config();
 
 const mongodbUrl = process.env.MONGODB_URL;
 
+let connection;
 const connectMongo = async () => {
     try {
-        await mongoose.connect(mongodbUrl, {
+        connection = await mongoose.connect(mongodbUrl, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
@@ -19,4 +20,16 @@ const connectMongo = async () => {
     }
 }
 
-module.exports = connectMongo;
+const closeMongo = async () => {
+    try {
+        await connection.close();
+    } catch (error) {
+        console.error(error);
+        process.exit(1);
+    }
+}
+
+module.exports = {
+    connectMongo,
+    closeMongo
+};
