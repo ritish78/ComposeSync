@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app  = require('../server');
-const { connectMongo, closeMongo } = require('../config/db');
+process.env.EXPRESS_SERVER_PORT = 5001;
 
 describe('check if jest is working', () => {
     describe('get jest to test', () => {

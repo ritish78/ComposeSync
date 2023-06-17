@@ -1,5 +1,5 @@
 const request = require("supertest");
-process.env.EXPRESS_SERVER_PORT = 5002;
+process.env.EXPRESS_SERVER_PORT = 5003;
 const app  = require('../server');
 
 const newUserValidInfo = {

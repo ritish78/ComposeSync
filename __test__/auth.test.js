@@ -1,5 +1,5 @@
 const request = require("supertest");
-process.env.EXPRESS_SERVER_PORT = 5001;
+process.env.EXPRESS_SERVER_PORT = 5002;
 const app  = require('../server');
 const { connectMongo, closeMongo } = require('../config/db');
 

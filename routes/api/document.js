@@ -101,9 +101,6 @@ router.get('/:documentId', auth, async (req, res) => {
 
         const user = await User.findById(req.user.id);
         const isUserAllowedToView = await canViewDocument(user, document);
-
-        console.log({ isUserAllowedToView });
-
     
         if (isUserAllowedToView) {
             return res.json(document);
@@ -396,6 +393,10 @@ router.post('/share/:documentId/:userEmail', auth, async (req, res) => {
 
         const document = await Document.findById(documentId);
         const currentUser = await User.findById(req.user.id);
+
+        if (!document) {
+            return res.status(404).send({ message: 'Document does not exists to share!' });
+        }
        
         const isUserAllowedToShareDocument = await canShareDocument(currentUser, document);
 
