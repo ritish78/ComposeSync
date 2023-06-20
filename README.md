@@ -20,7 +20,12 @@ Key Features of ComposeSync:
 
 
 # How to install:
-1. First, clone the repo using the command:
+* Easy way to install this app is to use Docker. Run the command:
+```
+docker pull ritish56/composesync
+```
+
+1. If you don't want to use docker then, clone the repo using the command:
 ```
 git clone https://github.com/ritish78/ComposeSync.git
 ```
