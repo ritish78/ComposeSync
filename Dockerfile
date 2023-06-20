@@ -25,8 +25,7 @@ WORKDIR /app
 # Copy the rest of the application files to /app
 COPY . .
 
-ENV PORT=5000
-
+EXPOSE 3000
 EXPOSE 5000
 
 # Start the server
