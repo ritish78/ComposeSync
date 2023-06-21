@@ -24,6 +24,13 @@ Key Features of ComposeSync:
 ```
 docker pull ritish56/composesync
 ```
+You also have to provide these environment variables:
+```
+MONGODB_URL
+JWT_SECRET
+EXPRESS_SERVER_PORT
+UPSTASH_REDIS_URL
+```
 
 1. If you don't want to use docker then, clone the repo using the command:
 ```
